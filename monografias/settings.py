@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'home',
     'equipe',
     'documentos',
+    'drf_yasg',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
