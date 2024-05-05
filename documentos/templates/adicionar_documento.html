@@ -1,0 +1,93 @@
+{% extends 'base.html' %} {% block title %} Página de Adicionar Monografia {% endblock %}
+
+{%load crispy_forms_tags %}
+
+{%block content %}
+
+  <div class="container mt-3 mb-5">
+    <div class="d-flex justify-content-between">
+      <h1>Adicionar Monografia</h1>
+      <button class="btn btn-primary">
+        <a class="nav-link" href="{% url 'listar_documentos' %}">Voltar</a>
+      </button>
+    </div>
+    <form action="" method="POST" class="d-flex flex-column gap-3" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="form-group d-flex justify-content-between gap-5">
+        <label class="flex-fill">
+          {{ form.autor|as_crispy_field}}
+        </label>
+
+        <label class="flex-fill">
+          {{ form.orientador|as_crispy_field}}
+        </label>
+
+        <label class="flex-fill">
+          {{ form.coorientador|as_crispy_field}}
+        </label>
+      </div>
+
+      <div class="form-group d-flex justify-content-between gap-5">
+        <label class="flex-fill">
+          {{ form.areaConcentracao|as_crispy_field}}
+        </label>
+
+        <label class="d-flex justify-content-between align-items-center flex-fill">
+          {{ form.dataEntrega|as_crispy_field}}
+          <button id="dataAtualBtn" type="button" class="btn btn-secondary ">Data Atual</button>
+        </label>
+
+        <label class="d-flex justify-content-between align-items-center flex-fill" style="width: 100px">
+          {{ form.notaFinal|as_crispy_field }}
+        </label>
+
+        <label class="flex-fill">
+          {{ form.arquivo|as_crispy_field}}
+        </label>
+      </div>
+
+      {{ form.titulo|as_crispy_field}}
+
+      {{ form.resumo|as_crispy_field}}
+
+      {{ form.palavrasChaves|as_crispy_field}}
+      
+      {% if '/adicionar' in request.path %}
+        <button type="submit" class="btn btn-primary">Adicionar</button>
+      {% elif '/editar/' in request.path %}
+        <button type="submit" class="btn btn-primary">Editar</button>
+      {% endif %}
+    </form>
+  </div>
+</div>
+
+
+<script>
+  // Função para obter a data atual no formato dd/mm/yyyy
+  function obterDataAtual() {
+      var hoje = new Date();
+      var dia = hoje.getDate();
+      var mes = hoje.getMonth() + 1;
+      var ano = hoje.getFullYear();
+
+      dia = dia < 10 ? '0' + dia : dia;
+      mes = mes < 10 ? '0' + mes : mes;
+
+      var dataFormatada = dia + '/' + mes + '/' + ano;
+
+      return dataFormatada;
+  }
+
+  function preencherCampoDataAtual() {
+      var dataAtual = obterDataAtual();
+      document.getElementById('dataAtualCampo').value = dataAtual;
+  }
+
+  document.getElementById('dataAtualBtn').addEventListener('click', function() {
+      preencherCampoDataAtual();
+  });
+</script>
+
+
+{% endblock %}

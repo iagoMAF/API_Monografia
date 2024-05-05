@@ -1,0 +1,57 @@
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th><a href="?ordenacao={% if ordenacao == 'titulo' %}-titulo{% else %}titulo{% endif %}">Título</a></th>
+      <th scope="col">Autor</th>
+      <th scope="col">Orientador</th>
+      <th scope="col">Coorientador</th>
+      <th scope="col">Palavras-Chaves</th>
+      <th><a href="?ordenacao={% if ordenacao == 'data' %}-data{% else %}data{% endif %}">Data</a></th>
+      <th scope="col">Área de Concentração</th>
+      <th scope="col">Arquivo</th>
+      <th scope="col">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for documento in Documentos %}
+    <tr>
+      <td>{{documento.titulo}}</td>
+      <td>
+        {% for autor in documento.autor.all %} {{ autor.nome }}   
+          {% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      </td>
+      <td>
+        {% for orientador in documento.orientador.all %} {{ orientador.nome }}   
+          {% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      </td>
+      <td>
+        {% for coorientador in documento.coorientador.all %} {{ coorientador.nome }}   
+          {% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      </td>
+      <td>{{documento.palavrasChaves}}</td>
+      <td>{{documento.dataEntrega}}</td>  
+      <td>{{documento.areaConcentracao}}</td>
+      {% if documento.arquivo %}
+      <td>
+        <a href="/{{ documento.arquivo }}">Link</a>
+      </td>
+      {% else %}
+      <td>Nenhum arquivo disponível</td>
+      {% endif %}
+      <td>
+        <a class="btn btn-primary" href="{% url 'editar' documento.id %}">Editar</a>
+        <button type="button" 
+          class="btn btn-danger btn-deletar" 
+          data-bs-toggle="modal"
+          data-bs-target="#staticBackdrop" 
+          data-url="{% url 'deletar' documento.id %}">
+          Deletar
+        </button>      
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

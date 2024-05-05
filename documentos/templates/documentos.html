@@ -1,0 +1,19 @@
+{% extends 'base.html' %} {% block title %} Página de Monografias {% endblock %}
+{%block content %}
+
+<section style="margin: 60px">
+  <div class="d-flex justify-content-between mb-2">
+    <h1>Documentos</h1>
+    <a class="btn btn-primary d-flex align-items-center" href="{% url 'adicionar' %}">Adicionar</a>
+  </div>
+
+  {% include 'includes/pesquisa.html' %}
+
+  {% include 'includes/lista.html' %}
+  
+  {% include 'includes/modal.html' %}
+
+  {% include 'includes/paginacao.html' %}
+
+</section>
+{% endblock %}

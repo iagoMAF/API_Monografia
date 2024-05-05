@@ -1,0 +1,19 @@
+<form class="d-flex gap-3 mt-2" action="{% url 'listar_documentos' %}" method="GET">
+  <div class="input-group mb-3">
+    <input 
+      type="text" 
+      class="form-control" 
+      placeholder="Pesquisa o título da monografia" 
+      aria-label="Recipient's username" 
+      aria-describedby="basic-addon2"
+      value="{{request.GET.obj}}"
+      name="obj">
+    <div class="input-group-append">
+      <button class="btn btn-outline-primary" type="submit">Pesquisar</button>
+      {% if request.GET.obj %}
+        <a class="btn btn-primary" href="{% url 'listar_documentos' %}">Resetar</a>
+      {% endif %}
+    </div>
+  </div>
+</form>
+

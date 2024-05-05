@@ -1,0 +1,40 @@
+<nav aria-label="Page navigation example" class="float-end">
+  <ul class="pagination">
+
+    {% if Documentos.has_previous %}
+      {% if request.GET.obj %}
+        <li class="page-item"><a class="page-link" href="?page={{ Documentos.previous_page_number }}&obj={{request.GET.obj}}">Anterior</a></li>
+      {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ Documentos.previous_page_number }}">Anterior</a></li>
+      {% endif %}
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+    {% endif %}
+
+    {% for num_pagina in page_numbers %}
+      {% if request.GET.obj %}
+        {% if num_pagina == Documentos.number %}
+          <li class="page-item active"><span class="page-link">{{ num_pagina }}</span></li>
+        {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{ num_pagina }}&obj={{request.GET.obj}}">{{ num_pagina }}</a></li>
+        {% endif %}
+      {% else %}
+        {% if num_pagina == Documentos.number %}
+          <li class="page-item active"><span class="page-link">{{ num_pagina }}</span></li>
+        {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{ num_pagina }}">{{ num_pagina }}</a></li>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+
+    {% if Documentos.has_next %}
+      {% if request.GET.obj %}
+        <li class="page-item"><a class="page-link" href="?page={{ Documentos.next_page_number }}&obj={{request.GET.obj}}">Próxima</a></li>
+      {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ Documentos.next_page_number }}&obj={{request.GET.obj}}">Próxima</a></li>
+      {% endif %}
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Próxima</span></li>
+    {% endif %}
+  </ul>
+</nav>
