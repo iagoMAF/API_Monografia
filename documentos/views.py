@@ -11,6 +11,8 @@ from .serializer import DocumentosSerializer
 from django.shortcuts import render
 from .models import Documentos
 import os
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 def view_pdf(request, filename):
     pdf_path = os.path.join('documentos/pdfs', filename)
@@ -23,19 +25,17 @@ def listar_documentos(request):
     documentos = Documentos.objects.all()
     return render(request, 'documentosDataTable.html', {'documentos': documentos})
 
-@api_view(['GET', 'POST'])
+@swagger_auto_schema(method='get', responses={200: openapi.Response("List of Documentos", DocumentosSerializer(many=True))}, tags=['documentos'])
+@api_view(['GET'])
 def listar_documentosAPI(request):
+    """
+    Listar todos os documentos.
+    """
     if request.method == 'GET':
         documentos = Documentos.objects.all()
         serializer = DocumentosSerializer(documentos, many=True)
         return Response(serializer.data)
 
-    elif request.method == 'POST':
-        serializer = DocumentosSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE', 'PUT', 'PATCH'])
 def detalhe_documento(request, pk):
