@@ -3,6 +3,11 @@ from . import views
 
 urlpatterns = [
     path('', views.listar_equipe, name='listar_equipe'),
+    path('adicionar/', views.adicionar_equipe, name='adicionar_equipe'),
+    path('atualizar/<int:pesquisador_id>/', views.atualizar_equipe, name='atualizar_equipe'),
+    path('excluir/<int:pesquisador_id>/', views.excluir_equipe, name='excluir_equipe'),
+    
+    # API
     path('api/pesquisadores/', views.listar_pesquisadoresJson, name='listar_pesquisadoresJson'),
     path('api/pesquisadores/<int:pk>/', views.detalhe_pesquisadorJson, name='detalhe_pesquisadorJson'),
     path('api/pesquisadores/cadastrar/', views.cadastrar_pesquisadorJson, name='cadastrar_pesquisadorJson'),

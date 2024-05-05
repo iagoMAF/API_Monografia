@@ -1,0 +1,61 @@
+{% extends 'base.html' %} {% block title %} Página de Adicionar Equipe {% endblock %}
+
+{% load static %}
+
+{%load crispy_forms_tags %}
+
+{%block content %}
+
+<section>
+  <div class="container mt-3 mb-5">
+    <div class="d-flex justify-content-between">
+      <h1>Adicionar Equipe</h1>
+      <button class="btn">
+        <a class="nav-link" href="{% url 'listar_equipe' %}">Voltar</a>
+      </button>
+    </div>
+    <form action="" method="POST" class="d-flex flex-column gap-3" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="form-group d-flex justify-content-between gap-5 align-items-center">
+        <label class="flex-fill">
+          {{ form.nome|as_crispy_field}}
+        </label>
+
+        <label class="flex-fill">
+          {{ form.nivel|as_crispy_field}}
+        </label>
+
+        <label class="flex-fill">
+          {{ form.email|as_crispy_field}}
+        </label>
+
+        <label class="flex-fill">
+          {{ form.ativo|as_crispy_field}}
+        </label>
+      </div>
+
+      <div class="form-group d-flex justify-content-between gap-5">
+        <label class="flex-fill">
+          {{ form.lattes|as_crispy_field}}
+        </label>
+
+        <label class="d-flex justify-content-between align-items-center flex-fill" style="width: 100px">
+          {{ form.linkedin|as_crispy_field }}
+        </label>
+
+        <label class="flex-fill">
+          {{ form.researchgate|as_crispy_field}}
+        </label>
+      </div>
+      
+      {% if '/adicionar' in request.path %}
+        <button type="submit" class="btn btn-primary">Adicionar</button>
+      {% elif '/atualizar/' in request.path %}
+        <button type="submit" class="btn btn-primary">Atualizar</button>
+      {% endif %}
+    </form>
+  </div>
+</section>
+
+{% endblock %}

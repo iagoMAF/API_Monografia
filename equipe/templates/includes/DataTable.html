@@ -1,0 +1,78 @@
+{% load static %}
+
+<table id="pesquisadorTabela" class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Nome</th>
+      <th scope="col">Nível</th>
+      <th scope="col">Lattes</th>
+      <th scope="col">Linkedin</th>
+      <th scope="col">Research-Gate</th>
+      <th scope="col">E-mail</th>
+      <th scope="col">Data de Cadastro</th>
+      <th scope="col">Ativo</th>
+      <th scope="col">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for pesquisador in pesquisadores %}
+    <tr>
+      <td>{{pesquisador.nome}}</td>
+      <td>{{pesquisador.nivel}}</td>
+
+      {% if pesquisador.lattes %}
+      <td><a href="{{pesquisador.lattes}}" target="_blank">Lattes</a></td>
+      {% else %}
+      <td>Nenhum link</td>
+      {% endif %}
+
+
+      {% if pesquisador.linkedin %}
+      <td><a href="{{pesquisador.linkedin}}" target="_blank">Linkedin</a></td>
+      {% else %}
+      <td>Nenhum link</td>
+      {% endif %}
+
+      {% if pesquisador.researchgate %}
+      <td><a href="{{pesquisador.researchgate}}" target="_blank">Research Gate</a></td>
+      {% else %}
+      <td>Nenhum link</td>
+      {% endif %}
+
+      <td>{{pesquisador.email}}</td>
+      <td>{{pesquisador.data_criacao}}</td>
+
+      {% if pesquisador.ativo %}
+      <td>Ativo</td>
+      {% else %}
+      <td>Desativado</td>
+      {% endif %}
+
+      <td>
+        <a class="btn btn-primary" href="{% url 'atualizar_equipe' pesquisador.id %}">
+          <img src="{% static 'midia/edit.svg' %}" alt="Icone de Editar">
+        </a>
+        <button type="button" 
+          class="btn btn-danger btn-deletar" 
+          data-bs-toggle="modal"
+          data-bs-target="#staticBackdrop" 
+          data-url="{% url 'excluir_equipe' pesquisador.id %}">
+          <img src="{% static 'midia/trash.svg' %}" alt="Icone de Deletar">
+        </button>      
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<script type="text/javascript">
+  $(document).ready( function () {
+    $('#pesquisadorTabela').DataTable({
+      responsive: true,
+      language: {
+        url: "{% static 'json/DataTable_pt-BR.json' %}",
+      },
+      pagingType: 'simple_numbers',
+    });
+  } );
+</script>

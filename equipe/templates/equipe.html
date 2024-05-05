@@ -1,34 +1,15 @@
 {% extends 'base.html' %} {% block title %} Página Inicial {% endblock %}
-{%block content %} 
+{%block content %}
 
 <section style="margin: 60px">
-  <h1>Equipe</h1>
- 
-<table class="table">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Nome</th>
-      <th scope="col">Nível</th>
-      <th scope="col">Lattes</th>
-      <th scope="col">linkedin</th>
-      <th scope="col">Research Gate</th>
-      <th scope="col">E-mail</th>
-      <th scope="col">Cargo</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for pesquisador in pesquisadores %}
-    <tr>
-      <td>{{pesquisador.nome}}</td>
-      <td>{{pesquisador.nivel}}</td>
-      <td>{{pesquisador.lattes}}</td>
-      <td>{{pesquisador.linkedin}}</td>
-      <td>{{pesquisador.researchgate}}</td>
-      <td>{{pesquisador.email}}</td>
-      <td>{{pesquisador.cargo}}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+  <div class="d-flex justify-content-between mb-2">
+    <h1>Equipe</h1>
+    <a class="btn btn-primary d-flex align-items-center font-weight-bold" href="{% url 'adicionar_equipe' %}">Adicionar</a>
+  </div>
+
+  {% include 'includes/DataTable.html' %}
+
+  {% include 'includes/modal.html' %}
+
 </section>
 {% endblock %}
