@@ -35,8 +35,9 @@
 </table>
 
 <script type="text/javascript">
-  $(document).ready( function () {
+  $(document).ready( function () {  
     $('#historicoTabela').DataTable({
+      order: [[ 0, "desc" ]],
       responsive: true,
       language: {
         url: "{% static 'json/DataTable_pt-BR.json' %}",
