@@ -48,7 +48,7 @@ def adicionar_documento(request):
         form = DocumentosForm()
         return render(request, 'adicionar_documento.html', {'form': form})
         
-    return render(request, 'adicionar_documento.html', {'form': form})
+    return render(request, 'adicionar_documento.html', {'form': form, 'editar_documento': False})
 
 def atualizar_documento(request, documento_id=None):  # Aceita o parâmetro documento_id
     # Se o documento_id for fornecido, recuperar o documento correspondente
@@ -68,7 +68,7 @@ def atualizar_documento(request, documento_id=None):  # Aceita o parâmetro docu
         form = DocumentosForm(instance=documento)  # Passa a instância do documento para o formulário
 
     documentos = Documentos.objects.all()
-    return render(request, 'adicionar_documento.html', {'form': form, 'documentos': documentos, 'documento_id': documento_id})
+    return render(request, 'adicionar_documento.html', {'form': form, 'documentos': documentos, 'documento_id': documento_id, 'editar_documento': True})
 
 def excluir_documento(request, documento_id):
     documento = get_object_or_404(Documentos, id=documento_id)

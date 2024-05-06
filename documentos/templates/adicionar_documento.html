@@ -8,10 +8,14 @@
 
   <section class="mx-5 mt-3 mb-5">
     <div class="d-flex justify-content-between mb-4">
-      <h1>Adicionar Monografia</h1>
-      <button class="btn">
-        <a class="nav-link font-weight-bold" href="{% url 'historico_elemento' documento_id 'Documento'  %}">Histórico</a>
-      </button>
+      <h1>Adicionar Monografia</h1> 
+
+      {% if editar_documento %}
+        <button class="btn">
+          <a class="nav-link font-weight-bold" href="{% url 'historico_elemento' documento_id 'Documento'  %}">Histórico</a>
+        </button>
+      {% endif %}
+      
       <button class="btn btn-primary">
         <a class="nav-link" href="{% url 'listar_documentos' %}">Voltar</a>
       </button>

@@ -27,7 +27,7 @@ def adicionar_equipe(request):
             pesquisador = Pesquisador.objects.all()
             return redirect('/equipe', {'Pesquisadores': pesquisador})
         
-    return render(request, 'adicionar_pesquisador.html', {'form': form})
+    return render(request, 'adicionar_pesquisador.html', {'form': form, 'edicao_equipe': False})
     
 def atualizar_equipe(request, pesquisador_id=None):  # Aceita o parâmetro pesquisador_id
     # Se o pesquisador_id for fornecido, recuperar o documento correspondente
@@ -47,7 +47,7 @@ def atualizar_equipe(request, pesquisador_id=None):  # Aceita o parâmetro pesqu
         form = PesquisadorForm(instance=pesquisador)  # Passa a instância do pesquisador para o formulário
 
     pesquisadores = Pesquisador.objects.all()
-    return render(request, 'adicionar_pesquisador.html', {'form': form, 'Pesquisadores': pesquisadores, 'pesquisador_id': pesquisador_id})   
+    return render(request, 'adicionar_pesquisador.html', {'form': form, 'Pesquisadores': pesquisadores, 'pesquisador_id': pesquisador_id, 'edicao_equipe': True})   
     
 def excluir_equipe(request, pesquisador_id):
     print('aqui')

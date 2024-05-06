@@ -1,0 +1,2 @@
+Autenticação para rota da api
+Adicionar autenticação, via login e também fazer com que os usuários sem permissão não consigam acessar determinadas partes

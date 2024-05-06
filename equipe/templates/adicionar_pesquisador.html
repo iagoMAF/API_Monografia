@@ -9,9 +9,13 @@
   <section class="mx-5 mt-3 mb-5">
     <div class="d-flex justify-content-between mb-4">
       <h1>Adicionar Equipe</h1>
+
+      {% if edicao_equipe %}
       <button class="btn">
         <a class="nav-link font-weight-bold" href="{% url 'historico_elemento' pesquisador_id 'Equipe'  %}">Histórico</a>
       </button>
+    {% endif %}
+
       <button class="btn">
         <a class="nav-link" href="{% url 'listar_equipe' %}">Voltar</a>
       </button>
