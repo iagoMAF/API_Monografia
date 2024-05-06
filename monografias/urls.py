@@ -19,6 +19,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
     path('equipe/', include('equipe.urls')), 
+    path('historico/', include('historico.urls')),
     path('pdfs/', include('documentos.urls')),   # Mantém a rota pdfs/ funcional
     path('documentos/', include('documentos.urls')), 
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

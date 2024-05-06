@@ -14,6 +14,8 @@ from .models import Documentos
 import os
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
+from historico.models import Historico
+from historico.views import adicionar_historico, remover_historico, atualiza_historico
 
 def view_pdf(request, filename):
     pdf_path = os.path.join('documentos/pdfs', filename)
@@ -37,6 +39,8 @@ def adicionar_documento(request):
             model_instace.autor.set(form.cleaned_data['autor'])
             model_instace.orientador.set(form.cleaned_data['orientador'])
             model_instace.coorientador.set(form.cleaned_data['coorientador'])
+            # adicionando ao historico
+            adicionar_historico('Documento', model_instace.id) 
             
             documentos = Documentos.objects.all()
             return redirect('/documentos', {'Documentos': documentos})
@@ -55,12 +59,8 @@ def atualizar_documento(request, documento_id=None):  # Aceita o parâmetro docu
     if request.method == 'POST':
         form = DocumentosForm(request.POST, request.FILES, instance=documento)  # Passa a instância do documento para o formulário
         if form.is_valid(): 
+            atualiza_historico('Documento', form, Documentos.objects.get(pk=documento_id))
             form.save()
-            
-            # Criar um json onde vai salvar o que foi atualizado
-            # Ex: id = 1, data = DATENOW(), alteração= 'Nome da monografia alterado'
-            # Além de renderizar no front a data da atualização
-            # Criar uma rota para mostrar todas as alterações que foram feitas em determinado item
             
             documentos = Documentos.objects.all()
             return redirect('/documentos', {'Documentos': documentos})
@@ -68,11 +68,12 @@ def atualizar_documento(request, documento_id=None):  # Aceita o parâmetro docu
         form = DocumentosForm(instance=documento)  # Passa a instância do documento para o formulário
 
     documentos = Documentos.objects.all()
-    return render(request, 'adicionar_documento.html', {'form': form, 'documentos': documentos})
+    return render(request, 'adicionar_documento.html', {'form': form, 'documentos': documentos, 'documento_id': documento_id})
 
-def deletar_documento(request, documento_id):
+def excluir_documento(request, documento_id):
     documento = get_object_or_404(Documentos, id=documento_id)
     documento.delete()
+    remover_historico('Documentos', documento_id)
 
     documentos = Documentos.objects.all()
     return redirect('/documentos', {'Documentos': documentos})

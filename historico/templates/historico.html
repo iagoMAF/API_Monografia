@@ -1,0 +1,14 @@
+{% extends 'base.html' %} {% block title %} Página Inicial {% endblock %}
+{%block content %}
+
+<section style="margin: 60px">
+  <div class="d-flex justify-content-between mb-2">
+    <h1>Historico</h1>
+  </div>
+
+  {% include 'includes/TBHistorico.html' %}
+
+  {% include 'includes/modal.html' %}
+
+</section>
+{% endblock %}

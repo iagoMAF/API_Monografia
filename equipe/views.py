@@ -8,6 +8,8 @@ from .serializer import PesquisadorSerializer
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from .forms import PesquisadorForm
+from historico.models import Historico
+from historico.views import adicionar_historico, remover_historico, atualiza_historico
 
 def listar_equipe(request):
     pesquisadores = Pesquisador.objects.all()
@@ -20,6 +22,8 @@ def adicionar_equipe(request):
         if form.is_valid(): 
             post = form.save()
             post.save()
+            adicionar_historico('Equipe', form.id) 
+
             pesquisador = Pesquisador.objects.all()
             return redirect('/equipe', {'Pesquisadores': pesquisador})
         
@@ -33,7 +37,8 @@ def atualizar_equipe(request, pesquisador_id=None):  # Aceita o parâmetro pesqu
 
     if request.method == 'POST':
         form = PesquisadorForm(request.POST, instance=pesquisador)  # Passa a instância do pesquisador para o formulário
-        if form.is_valid(): 
+        if form.is_valid():
+            atualiza_historico('Equipe', form, Pesquisador.objects.get(pk=pesquisador_id))
             form.save()
             
             pesquisadores = Pesquisador.objects.all()
@@ -42,12 +47,14 @@ def atualizar_equipe(request, pesquisador_id=None):  # Aceita o parâmetro pesqu
         form = PesquisadorForm(instance=pesquisador)  # Passa a instância do pesquisador para o formulário
 
     pesquisadores = Pesquisador.objects.all()
-    return render(request, 'adicionar_pesquisador.html', {'form': form, 'Pesquisadores': pesquisadores})   
+    return render(request, 'adicionar_pesquisador.html', {'form': form, 'Pesquisadores': pesquisadores, 'pesquisador_id': pesquisador_id})   
     
 def excluir_equipe(request, pesquisador_id):
     print('aqui')
     pesquisador = get_object_or_404(Pesquisador, id=pesquisador_id)
     pesquisador.delete()
+    remover_historico('Equipe', pesquisador_id)
+    
     pesquisadores = Pesquisador.objects.all()
     return redirect('/equipe', {'Pesquisadores': pesquisadores})
 

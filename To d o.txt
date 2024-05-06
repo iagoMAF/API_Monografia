@@ -4,3 +4,10 @@ Equipe e Documento
   Criar uma rota para mostrar todas as alterações que foram feitas em determinado item
     Além de renderizar no front da tela de atualização a data da atualização
       Ex: Última atualização: 25/06/2024 - Nome da monografia alterado
+
+
+Historico de atualização
+  Vamos ter uma tela mostrando todas as atualizações do sistema (podemos ordenar depois comm base no id)
+  Em uma tela mais especifica, vamos mostrar somente as alterações que teve em determinado elemento, para acessar essa tela, podemos criar um botão vinculada ao item, na tela geral. Além de mostrar um botão para ver o historico na tela de edição, que vai entrar direto no elemento.
+
+  

@@ -6,7 +6,7 @@ urlpatterns = [
     path('', views.listar_documentos, name='listar_documentos'),
     path('adicionar/', views.adicionar_documento, name='adicionar_documento'),
     path('atualizar/<int:documento_id>/', views.atualizar_documento, name='atualizar_documento'),
-    path('deletar/<int:documento_id>/', views.deletar_documento, name='deletar_documento'),
+    path('excluir/<int:documento_id>/', views.excluir_documento, name='excluir_documento'),
     
     # API
     path('api/documentos/', views.listar_documentosAPI, name='listar_documentosAPI'),

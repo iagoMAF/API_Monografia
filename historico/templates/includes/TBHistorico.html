@@ -1,0 +1,47 @@
+{% load static %}
+
+<table id="historicoTabela" class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Data</th>
+      <th scope="col">Usuário</th>
+      <th scope="col">Tabela Alterada</th>
+      <th scope="col">Id do Elemento</th>
+      <th scope="col">Ação Realizada</th>
+      {% if not historico_unico %}
+        <th scope="col">Ver Historico</th>
+      {% endif %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for historico in Historicos %}
+    <tr>
+      <td>{{historico.data}}</td>
+      <td>{{historico.usuario}}</td>
+      <td>{{historico.tabela}}</td>
+      <td>{{historico.idElemento}}</td>
+      <td>{{historico.descAcao}}</td>
+
+      {% if not historico_unico %}
+        <td class="d-flex justify-content-center">
+          <a class="btn" href="{% url 'historico_elemento' historico.idElemento historico.tabela  %}">
+            <img src="{% static 'midia/eye.svg' %}">
+          </a>
+        </td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<script type="text/javascript">
+  $(document).ready( function () {
+    $('#historicoTabela').DataTable({
+      responsive: true,
+      language: {
+        url: "{% static 'json/DataTable_pt-BR.json' %}",
+      },
+      pagingType: 'simple_numbers',
+    });
+  } );
+</script>

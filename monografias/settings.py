@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'home',
     'equipe',
+    'historico',
     'documentos',
     'drf_yasg',
 ]

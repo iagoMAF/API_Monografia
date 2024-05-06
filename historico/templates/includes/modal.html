@@ -1,0 +1,32 @@
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Excluir</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Você realmente deseja excluir o item selecionado?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button id="confirmarDelecaoModal" type="button" class="btn btn-primary">Excluir</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    $('#confirmarDelecaoModal').on('click', function (event) {
+      var modal = $(this);
+      window.location.replace(modal.data('url'));
+    });
+    
+    $('.btn-deletar').on('click', function() {
+      var urlDeletar = $(this).data('url'); // Obtém a URL de exclusão do botão
+      console.log('alguma coisa');
+      $('#confirmarDelecaoModal').data('url', urlDeletar); // Define a URL de exclusão para o botão de confirmação
+    });
+  });
+  </script>
