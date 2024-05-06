@@ -1,0 +1,6 @@
+Equipe e Documento
+  Criar um json onde vai salvar o que foi atualizado
+    Ex: id = 1, data = DATENOW(), alteração= 'Nome da monografia alterado'
+  Criar uma rota para mostrar todas as alterações que foram feitas em determinado item
+    Além de renderizar no front da tela de atualização a data da atualização
+      Ex: Última atualização: 25/06/2024 - Nome da monografia alterado

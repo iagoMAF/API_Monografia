@@ -15,7 +15,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for documento in Documentos %}
+    {% for documento in documentos %}
     <tr>
       <td>{{documento.titulo}}</td>
       <td>
@@ -44,14 +44,14 @@
       <td>Nenhum arquivo disponível</td>
       {% endif %}
       <td>
-        <a class="btn btn-primary" href="{% url 'editar' documento.id %}">
+        <a class="btn btn-primary" href="{% url 'atualizar_documento' documento.id %}">
           <img src="{% static 'midia/edit.svg' %}" alt="Icone de Editar">
         </a>
         <button type="button" 
           class="btn btn-danger btn-deletar" 
           data-bs-toggle="modal"
           data-bs-target="#staticBackdrop" 
-          data-url="{% url 'deletar' documento.id %}">
+          data-url="{% url 'deletar_documento' documento.id %}">
           <img src="{% static 'midia/trash.svg' %}" alt="Icone de Editar">
         </button>      
       </td>

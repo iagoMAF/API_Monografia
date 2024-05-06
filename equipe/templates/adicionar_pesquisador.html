@@ -6,8 +6,7 @@
 
 {%block content %}
 
-<section>
-  <div class="container mt-3 mb-5">
+  <section class="mx-5 mt-3 mb-5">
     <div class="d-flex justify-content-between">
       <h1>Adicionar Equipe</h1>
       <button class="btn">
@@ -17,7 +16,7 @@
     <form action="" method="POST" class="d-flex flex-column gap-3" enctype="multipart/form-data">
       {% csrf_token %}
 
-      <div class="form-group d-flex justify-content-between gap-5 align-items-center">
+      <div class="form-group d-flex justify-content-between gap-5 align-items-end">
         <label class="flex-fill">
           {{ form.nome|as_crispy_field}}
         </label>
@@ -30,7 +29,7 @@
           {{ form.email|as_crispy_field}}
         </label>
 
-        <label class="flex-fill">
+        <label class="flex-fill mb-3">
           {{ form.ativo|as_crispy_field}}
         </label>
       </div>
@@ -40,7 +39,7 @@
           {{ form.lattes|as_crispy_field}}
         </label>
 
-        <label class="d-flex justify-content-between align-items-center flex-fill" style="width: 100px">
+        <label class="flex-fill">
           {{ form.linkedin|as_crispy_field }}
         </label>
 
@@ -49,13 +48,15 @@
         </label>
       </div>
       
+      <button type="submit" class="btn btn-primary">
       {% if '/adicionar' in request.path %}
-        <button type="submit" class="btn btn-primary">Adicionar</button>
+        Adicionar
       {% elif '/atualizar/' in request.path %}
-        <button type="submit" class="btn btn-primary">Atualizar</button>
+        Atualizar
       {% endif %}
+    </button>
     </form>
-  </div>
-</section>
+  </section>
+
 
 {% endblock %}

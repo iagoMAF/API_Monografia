@@ -2,9 +2,11 @@
 
 {%load crispy_forms_tags %}
 
+{% load static %}
+
 {%block content %}
 
-  <div class="container mt-3 mb-5">
+  <section class="mx-5 mt-3 mb-5">
     <div class="d-flex justify-content-between">
       <h1>Adicionar Monografia</h1>
       <button class="btn btn-primary">
@@ -33,9 +35,11 @@
           {{ form.areaConcentracao|as_crispy_field}}
         </label>
 
-        <label class="d-flex justify-content-between align-items-center flex-fill">
+        <label class="d-flex align-items-end gap-3 flex-fill">
           {{ form.dataEntrega|as_crispy_field}}
-          <button id="dataAtualBtn" type="button" class="btn btn-secondary ">Data Atual</button>
+          <button id="dataAtualBtn" type="button" class="btn btn-secondary mb-3">
+            <img src="{% static 'midia/calendar.svg' %}" alt="Icone de Calendário">
+          </button>
         </label>
 
         <label class="d-flex justify-content-between align-items-center flex-fill" style="width: 100px">
@@ -53,13 +57,15 @@
 
       {{ form.palavrasChaves|as_crispy_field}}
       
-      {% if '/adicionar' in request.path %}
-        <button type="submit" class="btn btn-primary">Adicionar</button>
-      {% elif '/editar/' in request.path %}
-        <button type="submit" class="btn btn-primary">Editar</button>
-      {% endif %}
+      <button type="submit" class="btn btn-primary">
+        {% if '/adicionar' in request.path %}
+          Adicionar
+        {% elif '/atualizar/' in request.path %}
+          Atualizar
+        {% endif %}
+      </button>
     </form>
-  </div>
+  </section>
 </div>
 
 
