@@ -14,16 +14,32 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active navbar-brand" aria-current="page" href="/">Inicio</a>
+          <a class="nav-link
+          {% if request.resolver_match.url_name == 'inicio'%}
+            active navbar-brand"
+          {% endif %}
+          aria-current="page" href="/">Inicio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'listar_equipe' %}">Equipe</a>
+          <a class="nav-link
+          {% if request.resolver_match.url_name == 'listar_equipe'%}
+            active navbar-brand"
+          {% endif %}
+          aria-current="page" href="{% url 'listar_equipe' %}">Equipe</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'listar_documentos' %}">Documentos</a>
+          <a class="nav-link
+          {% if request.resolver_match.url_name == 'listar_documentos'%}
+            active navbar-brand"
+          {% endif %}
+          aria-current="page" href="{% url 'listar_documentos' %}">Documentos</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'listar_historico' %}">Histórico</a>
+          <a class="nav-link
+          {% if request.resolver_match.url_name == 'listar_historico'%}
+            active navbar-brand"
+          {% endif %}
+          aria-current="page" href="{% url 'listar_historico' %}">Histórico</a>
         </li>
       </ul>
 
