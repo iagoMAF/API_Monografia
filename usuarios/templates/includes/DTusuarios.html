@@ -1,0 +1,60 @@
+{% load static %}
+
+<table id="pesquisadorTabela" class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Username</th>
+      <th scope="col">Primeiro Nome</th>
+      <th scope="col">Sobrenome</th>
+      <th scope="col">E-mail</th>
+      <th scope="col">Nível de Administrador</th>
+
+      {% if user.is_authenticated %}
+        <th scope="col">Ações</th>
+      {% endif %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for usuario in usuarios %}
+    <tr>
+      <td>{{usuario.username}}</td>
+      <td>{{usuario.first_name}}</td>
+      <td>{{usuario.last_name}}</td>
+      <td>{{usuario.email}}</td>
+
+      {% if usuario.is_staff %}
+      <td>Ativo</td>
+      {% else %}
+      <td>Desativado</td>
+      {% endif %}
+
+      {% if user.is_authenticated %}
+        <td>
+          <a class="btn btn-primary" href="{% url 'atualizar_usuario' usuario.id %}">
+            <img src="{% static 'midia/edit.svg' %}" alt="Icone de Editar">
+          </a>
+          <button type="button" 
+            class="btn btn-danger btn-deletar" 
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop" 
+            data-url="{% url 'excluir_usuario' usuario.id %}">
+            <img src="{% static 'midia/trash.svg' %}" alt="Icone de Deletar">
+          </button>      
+        </td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<script type="text/javascript">
+  $(document).ready( function () {
+    $('#pesquisadorTabela').DataTable({
+      responsive: true,
+      language: {
+        url: "{% static 'json/DataTable_pt-BR.json' %}",
+      },
+      pagingType: 'simple_numbers',
+    });
+  } );
+</script>

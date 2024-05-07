@@ -8,7 +8,11 @@
 
   <section class="container mx-auto mt-3 mb-5">
     
-    <form class="mx-auto form-signin" action="{% url 'cadastro' %}" method="POST">
+    {% if user %}
+      <form class="mx-auto form-signin" action="{% url 'atualizar_usuario' user.id %}" method="POST">  
+    {%else%}
+      <form class="mx-auto form-signin" action="{% url 'cadastro' %}" method="POST">
+    {%endif%}
 
       {% csrf_token %}
 
@@ -20,35 +24,58 @@
 
       <div class="form-label-group mb-3 d-flex gap-3">
         <div class="form-label-group flex-grow-1">
-          <input type="text" name="primeiroNome" class="form-control" placeholder="Primeiro nome..." required autofocus>
+          <input type="text" name="primeiroNome" class="form-control" placeholder="Primeiro nome..." required autofocus
+          {% if user %}
+          value="{{user.first_name}}"
+          {% endif %}>
         </div>
   
         <div class="form-label-group flex-grow-1">
-          <input type="text" name="sobrenome" class="form-control" placeholder="Sobrenome..." required autofocus>
+          <input type="text" name="sobrenome" class="form-control" placeholder="Sobrenome..." required autofocus
+          {% if user %}
+            value="{{user.last_name}}"
+          {% endif %}>
         </div>
       </div>
 
       <div class="form-label-group mb-3 d-flex gap-3">
         <div class="form-label-group flex-grow-1">
-          <input type="text" name="username" class="form-control" placeholder="Username..." required autofocus>
+          <input type="text" name="username" class="form-control" placeholder="Username..." required autofocus
+          {% if user %}
+            value="{{user.username}}"
+          {% endif %}>
         </div>
         
         <div class="form-label-group flex-grow-1">
-          <input type="email" name="email" class="form-control" placeholder="E-mail..." required autofocus>
+          <input type="email" name="email" class="form-control" placeholder="E-mail..." required autofocus
+          {% if user %}
+            value="{{user.email}}"
+          {% endif %}>
         </div>
       </div>
 
-      <div class="form-label-group mb-3 d-flex gap-3">
-        <div class="form-label-group flex-grow-1">
-          <input type="password" name="senha" class="form-control" placeholder="Senha..." required>
-        </div>
+      {% if not user %}
+        <div class="form-label-group mb-3 d-flex gap-3">
+          <div class="form-label-group flex-grow-1">
+            <input type="password" name="senha" class="form-control" placeholder="Senha..." required
+            {% if user %}
+            value="{{user.password}}"
+            {% endif %}>
+          </div>
 
-        <div class="form-label-group flex-grow-1">
-          <input type="password" name="confirmaSenha" class="form-control" placeholder="Confirmar senha..." required>
+          <div class="form-label-group flex-grow-1">
+            <input type="password" name="confirmaSenha" class="form-control" placeholder="Confirmar senha..." required>
+          </div>
         </div>
-      </div>
+      {% endif %}
 
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Cadastrar</button>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">
+        {% if user %}
+          Atualizar
+        {% else %}
+          Cadastrar
+        {% endif %}
+      </button>
     </form>
   </section>
 </div>

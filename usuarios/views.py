@@ -2,8 +2,28 @@ from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as loginAuth, logout as logoutAuth
+from django.contrib.admin.views.decorators import staff_member_required 
 
-# Create your views here.
+@staff_member_required(login_url='/auth/login')
+def listar_usuarios(request):
+  usuarios = User.objects.all()
+  return render(request, 'usuarios.html', {'usuarios': usuarios})
+
+def atualizar_usuario(request, usuario_id):
+   user = User.objects.filter(id=usuario_id).first() 
+   
+   if user:
+     return render(request, 'cadastro.html', {'user': user})
+   else:
+      usuarios = User.objects.all()
+      return render(request, 'usuarios.html', {'usuarios': usuarios})
+
+def excluir_usuario(request, usuario_id):
+  user = User.objects.filter(id=usuario_id).first() 
+  user.delete()
+  usuarios = User.objects.all()
+  return render(request, 'usuarios.html', {'usuarios': usuarios})
+
 def cadastro(request):
   if request.method == 'GET':
     return render(request, 'cadastro.html')

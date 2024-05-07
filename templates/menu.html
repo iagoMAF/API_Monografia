@@ -43,6 +43,12 @@
         </li>
       </ul>
 
+      {% if user.is_staff %}
+      <div class="d-flex">
+        <a class="nav-link" href="{% url 'listar_usuarios' %}">Painel Admin</a>
+      </div>
+    {% endif %}
+
       {% if not '/auth/' in request.path %}
         {% if user.is_authenticated %}
           <div class="d-flex">
@@ -54,8 +60,7 @@
           </div>
         {% endif %}
       {% endif %}
-      
-     
+
     </div>
   </div>
 </nav>
