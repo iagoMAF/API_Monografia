@@ -27,15 +27,18 @@
         </li>
       </ul>
 
-      {% if user.is_authenticated %}
-        <div class="d-flex">
-          <a class="nav-link" href="{% url 'logout' %}">Sair</a>
-        </div>
-      {% else %}
-        <div class="d-flex">
-          <a class="nav-link" href="{% url 'login' %}">Login</a>
-        </div>
+      {% if not '/auth/' in request.path %}
+        {% if user.is_authenticated %}
+          <div class="d-flex">
+            <a class="nav-link" href="{% url 'logout' %}">Sair</a>
+          </div>
+        {% else %}
+          <div class="d-flex">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+          </div>
+        {% endif %}
       {% endif %}
+      
      
     </div>
   </div>

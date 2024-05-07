@@ -1,8 +1,7 @@
 from django.http.response import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as loginAuth, logout as logoutAuth
-from django.urls import include
 
 # Create your views here.
 def cadastro(request):
@@ -28,7 +27,6 @@ def cadastro(request):
       user.save()
       return render(request, 'login.html', {'user': user})
     
-
 def login(request):
   if request.method == 'GET':
     return render(request, 'login.html')
@@ -41,10 +39,10 @@ def login(request):
     if user is not None:
       loginAuth(request, user)  
       
-      return render(request, 'index.html')
+      return redirect('/')
     else:
       return render(request, 'login.html', {'error': 'E-mail ou Senha invalidos'})
     
 def logout(request):
   logoutAuth(request)
-  return render(request, 'index.html')
+  return redirect('/')
