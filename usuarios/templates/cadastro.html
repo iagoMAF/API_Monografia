@@ -13,8 +13,12 @@
       <a class="link-opacity-100-hover" href="{% url 'login' %}">Voltar</a>
     {%endif%}
     
-    {% if user %}
-      <form class="mx-auto form-signin" action="{% url 'atualizar_usuario' user.id %}" method="POST">  
+    {% if user.is_authenticated %}
+      {% if usuario %}
+        <form class="mx-auto form-signin" action="{% url 'atualizar_usuario' usuario.id %}" method="POST">  
+      {% else %}
+        <form class="mx-auto form-signin" action="{% url 'cadastro' %}" method="POST">  
+      {% endif %}
     {%else%}
       <form class="mx-auto form-signin" action="{% url 'cadastro' %}" method="POST">
     {%endif%}
@@ -30,15 +34,15 @@
       <div class="form-label-group mb-3 d-flex gap-3">
         <div class="form-label-group flex-grow-1">
           <input type="text" name="primeiroNome" class="form-control" placeholder="Primeiro nome..." required autofocus
-          {% if user %}
-          value="{{user.first_name}}"
+          {% if usuario %}
+          value="{{usuario.first_name}}"
           {% endif %}>
         </div>
   
         <div class="form-label-group flex-grow-1">
           <input type="text" name="sobrenome" class="form-control" placeholder="Sobrenome..." required autofocus
-          {% if user %}
-            value="{{user.last_name}}"
+          {% if usuario %}
+            value="{{usuario.last_name}}"
           {% endif %}>
         </div>
       </div>
@@ -46,25 +50,25 @@
       <div class="form-label-group mb-3 d-flex gap-3">
         <div class="form-label-group flex-grow-1">
           <input type="text" name="username" class="form-control" placeholder="Username..." required autofocus
-          {% if user %}
-            value="{{user.username}}"
+          {% if usuario %}
+            value="{{usuario.username}}"
           {% endif %}>
         </div>
         
         <div class="form-label-group flex-grow-1">
           <input type="email" name="email" class="form-control" placeholder="E-mail..." required autofocus
-          {% if user %}
-            value="{{user.email}}"
+          {% if usuario %}
+            value="{{usuario.email}}"
           {% endif %}>
         </div>
       </div>
 
-      {% if not user %}
+      {% if not user.is_authenticated or not usuario %}
         <div class="form-label-group mb-3 d-flex gap-3">
           <div class="form-label-group flex-grow-1">
             <input type="password" name="senha" class="form-control" placeholder="Senha..." required
-            {% if user %}
-            value="{{user.password}}"
+            {% if usuario %}
+            value="{{usuario.password}}"
             {% endif %}>
           </div>
 
@@ -74,20 +78,20 @@
         </div>
       {% endif %}
 
-      {% if user %}
+      {% if user.is_authenticated %}
         <div class="input-group mb-3">
           <div class="input-group-text d-flex justify-content-center align-items-center">
-            <input class="form-check-input mt-0 ms-0" type="checkbox" {% if user.is_staff %} checked {% endif %} name="admin">
+            <input class="form-check-input mt-0 ms-0" type="checkbox" {% if usuario.is_staff %} checked {% endif %} name="admin">
           </div>
           <p id="admin" class="mb-0 ms-1">Tornar usuário adiministrador?</p>
         </div>
       {% endif %}
 
       <button class="btn btn-lg btn-primary btn-block" type="submit">
-        {% if user %}
+        {% if '/auth/cadastro/' in request.path %}
+          Adicionar
+        {% elif '/auth/atualizar/' in request.path %}
           Atualizar
-        {% else %}
-          Cadastrar
         {% endif %}
       </button>
     </form>

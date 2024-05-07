@@ -27,24 +27,22 @@ def atualizar_usuario(request, usuario_id):
       atualiza_historico(request.user.username, 'Usuário', user, userAntigo)
       
       usuarios = User.objects.all()
-      return render(request, 'usuarios.html', {'usuarios': usuarios})
+      return redirect('/auth/usuarios', {'usuarios': usuarios})
    else:
-      return render(request, 'cadastro.html', {'user': user})
+      return render(request, 'cadastro.html', {'usuario': user})
 
 def excluir_usuario(request, usuario_id):
   user = User.objects.filter(id=usuario_id).first() 
   user.delete()
-  remover_historico(request.user.username, 'Usuário', user.id)
+  remover_historico(request.user.username, 'Usuário', usuario_id)
   
   usuarios = User.objects.all()
   return render(request, 'usuarios.html', {'usuarios': usuarios})
 
 def cadastro(request):
   if request.method == 'GET':
-    return render(request, 'cadastro.html', {'user': ''})
+    return render(request, 'cadastro.html')
   else:
-    logout(request)
-    
     username = request.POST.get('username')
     primeiroNome = request.POST.get('primeiroNome')
     sobrenome = request.POST.get('sobrenome')
@@ -60,10 +58,15 @@ def cadastro(request):
       if senha!= confirmaSenha:
         return render(request, 'cadastro.html')
       
-      user = User.objects.create_user(username=username, email=email, password=senha, first_name=primeiroNome, last_name=sobrenome, is_staff=False)
+      user = User.objects.create_user(username=username, email=email, password=senha, first_name=primeiroNome, last_name=sobrenome)
       user.save()
-      adicionar_historico(user.username, 'Usuário', user.id)
       
+      if request.user.username != username:
+        adicionar_historico(request.user.username, 'Usuário', user.id)
+        usuarios = User.objects.all()
+        return render(request, 'usuarios.html', {'usuarios': usuarios})
+      
+      adicionar_historico(user.username, 'Usuário', user.id)
       return render(request, 'login.html')
     
 def login(request):

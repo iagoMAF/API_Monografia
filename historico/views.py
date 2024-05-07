@@ -27,11 +27,11 @@ def adicionar_historico(usuario, tabela, id):
         descAcao='Criação'
     )
     
-def remover_historico(usuario, tabela, id):
+def remover_historico(usuario, tabela, id_elemento):
     Historico.objects.create(
-        usuario=usuario,
+        usuario=usuario,    
         tabela=tabela,
-        idElemento=id,
+        idElemento=id_elemento,
         tipoAcao='D',
         descAcao='Exclusão'
     )
