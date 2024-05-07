@@ -1,0 +1,39 @@
+{% extends 'base.html' %} {% block title %} Página de Adicionar Monografia {% endblock %}
+
+{%load crispy_forms_tags %}
+
+{% load static %}
+
+{%block content %}
+
+  <section class="container mx-auto mt-3 mb-5">
+    
+    <form class="mx-auto form-signin" action="{% url 'login' %}" method="POST" style="max-width: 390px">
+
+      {% csrf_token %}
+
+      <div class="text-center mb-4">
+        <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Login Usuário</h1>
+        <p>Site de monografias - Sistemas Distribuidos - 2024</p>
+      </div>
+
+      {% if error %}
+        <p class="text-danger">{{ error }}</p>
+      {% endif %}
+
+      <div class="form-label-group mb-3">
+        <input type="text" name="username" class="form-control" placeholder="Username..." required autofocus>
+      </div>
+
+      <div class="form-label-group mb-3">
+        <input type="password" name="senha" class="form-control" placeholder="Senha..." required autofocus>
+      </div>
+
+
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+    </form>
+  </section>
+</div>
+
+{% endblock %}

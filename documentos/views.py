@@ -16,6 +16,7 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from historico.models import Historico
 from historico.views import adicionar_historico, remover_historico, atualiza_historico
+from django.contrib.auth.decorators import login_required
 
 def view_pdf(request, filename):
     pdf_path = os.path.join('documentos/pdfs', filename)
@@ -28,6 +29,7 @@ def listar_documentos(request):
     documentos = Documentos.objects.all()
     return render(request, 'documentosDataTable.html', {'documentos': documentos})
 
+@login_required(login_url="/auth/login/")
 def adicionar_documento(request):
     form = DocumentosForm(request.POST, request.FILES)
     if request.method == 'POST':
@@ -50,6 +52,7 @@ def adicionar_documento(request):
         
     return render(request, 'adicionar_documento.html', {'form': form, 'editar_documento': False})
 
+@login_required(login_url="/auth/login/")
 def atualizar_documento(request, documento_id=None):  # Aceita o parâmetro documento_id
     # Se o documento_id for fornecido, recuperar o documento correspondente
     documento = None
@@ -70,6 +73,7 @@ def atualizar_documento(request, documento_id=None):  # Aceita o parâmetro docu
     documentos = Documentos.objects.all()
     return render(request, 'adicionar_documento.html', {'form': form, 'documentos': documentos, 'documento_id': documento_id, 'editar_documento': True})
 
+@login_required(login_url="/auth/login/")
 def excluir_documento(request, documento_id):
     documento = get_object_or_404(Documentos, id=documento_id)
     documento.delete()

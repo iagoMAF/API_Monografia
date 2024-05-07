@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'equipe',
     'historico',
     'documentos',
+    'usuarios',
     'drf_yasg',
 ]
 

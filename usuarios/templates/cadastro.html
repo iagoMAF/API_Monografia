@@ -1,0 +1,56 @@
+{% extends 'base.html' %} {% block title %} Página de Adicionar Monografia {% endblock %}
+
+{%load crispy_forms_tags %}
+
+{% load static %}
+
+{%block content %}
+
+  <section class="container mx-auto mt-3 mb-5">
+    
+    <form class="mx-auto form-signin" action="{% url 'cadastro' %}" method="POST">
+
+      {% csrf_token %}
+
+      <div class="text-center mb-4">
+        <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Cadastro Usuário</h1>
+        <p>Site de monografias - Sistemas Distribuidos - 2024</p>
+      </div>
+
+      <div class="form-label-group mb-3 d-flex gap-3">
+        <div class="form-label-group flex-grow-1">
+          <input type="text" name="primeiroNome" class="form-control" placeholder="Primeiro nome..." required autofocus>
+        </div>
+  
+        <div class="form-label-group flex-grow-1">
+          <input type="text" name="sobrenome" class="form-control" placeholder="Sobrenome..." required autofocus>
+        </div>
+      </div>
+
+      <div class="form-label-group mb-3 d-flex gap-3">
+        <div class="form-label-group flex-grow-1">
+          <input type="text" name="username" class="form-control" placeholder="Username..." required autofocus>
+        </div>
+        
+        <div class="form-label-group flex-grow-1">
+          <input type="email" name="email" class="form-control" placeholder="E-mail..." required autofocus>
+        </div>
+      </div>
+
+      <div class="form-label-group mb-3 d-flex gap-3">
+        <div class="form-label-group flex-grow-1">
+          <input type="password" name="senha" class="form-control" placeholder="Senha..." required>
+        </div>
+
+        <div class="form-label-group flex-grow-1">
+          <input type="password" name="confirmaSenha" class="form-control" placeholder="Confirmar senha..." required>
+        </div>
+      </div>
+
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Cadastrar</button>
+    </form>
+  </section>
+</div>
+
+{% endblock %}

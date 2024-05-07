@@ -10,11 +10,13 @@ from drf_yasg import openapi
 from .forms import PesquisadorForm
 from historico.models import Historico
 from historico.views import adicionar_historico, remover_historico, atualiza_historico
+from django.contrib.auth.decorators import login_required
 
 def listar_equipe(request):
     pesquisadores = Pesquisador.objects.all()
     return render(request, 'equipe.html', {'pesquisadores': pesquisadores}) 
 
+@login_required(login_url="/auth/login/")
 def adicionar_equipe(request):
     form = PesquisadorForm()
     if request.method == 'POST':
@@ -29,6 +31,7 @@ def adicionar_equipe(request):
         
     return render(request, 'adicionar_pesquisador.html', {'form': form, 'edicao_equipe': False})
     
+@login_required(login_url="/auth/login/")
 def atualizar_equipe(request, pesquisador_id=None):  # Aceita o parâmetro pesquisador_id
     # Se o pesquisador_id for fornecido, recuperar o documento correspondente
     pesquisador = None
@@ -48,7 +51,8 @@ def atualizar_equipe(request, pesquisador_id=None):  # Aceita o parâmetro pesqu
 
     pesquisadores = Pesquisador.objects.all()
     return render(request, 'adicionar_pesquisador.html', {'form': form, 'Pesquisadores': pesquisadores, 'pesquisador_id': pesquisador_id, 'edicao_equipe': True})   
-    
+
+@login_required(login_url="/auth/login")
 def excluir_equipe(request, pesquisador_id):
     print('aqui')
     pesquisador = get_object_or_404(Pesquisador, id=pesquisador_id)
