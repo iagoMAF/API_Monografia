@@ -7,6 +7,11 @@
 {%block content %}
 
   <section class="container mx-auto mt-3 mb-5">
+    {% if user.is_authenticated %}
+      <a class="link-opacity-100-hover" href="{% url 'listar_usuarios' %}">Voltar</a>
+    {%else%}
+      <a class="link-opacity-100-hover" href="{% url 'login' %}">Voltar</a>
+    {%endif%}
     
     {% if user %}
       <form class="mx-auto form-signin" action="{% url 'atualizar_usuario' user.id %}" method="POST">  
@@ -66,6 +71,15 @@
           <div class="form-label-group flex-grow-1">
             <input type="password" name="confirmaSenha" class="form-control" placeholder="Confirmar senha..." required>
           </div>
+        </div>
+      {% endif %}
+
+      {% if user %}
+        <div class="input-group mb-3">
+          <div class="input-group-text d-flex justify-content-center align-items-center">
+            <input class="form-check-input mt-0 ms-0" type="checkbox" {% if user.is_staff %} checked {% endif %} name="admin">
+          </div>
+          <p id="admin" class="mb-0 ms-1">Tornar usuário adiministrador?</p>
         </div>
       {% endif %}
 

@@ -42,7 +42,7 @@ def adicionar_documento(request):
             model_instace.orientador.set(form.cleaned_data['orientador'])
             model_instace.coorientador.set(form.cleaned_data['coorientador'])
             # adicionando ao historico
-            adicionar_historico('Documento', model_instace.id) 
+            adicionar_historico(request.user.username, 'Documento', model_instace.id) 
             
             documentos = Documentos.objects.all()
             return redirect('/documentos', {'Documentos': documentos})
@@ -62,7 +62,7 @@ def atualizar_documento(request, documento_id=None):  # Aceita o parâmetro docu
     if request.method == 'POST':
         form = DocumentosForm(request.POST, request.FILES, instance=documento)  # Passa a instância do documento para o formulário
         if form.is_valid(): 
-            atualiza_historico('Documento', form, Documentos.objects.get(pk=documento_id))
+            atualiza_historico(request.user.username, 'Documento', form, Documentos.objects.get(pk=documento_id))
             form.save()
             
             documentos = Documentos.objects.all()
@@ -77,7 +77,7 @@ def atualizar_documento(request, documento_id=None):  # Aceita o parâmetro docu
 def excluir_documento(request, documento_id):
     documento = get_object_or_404(Documentos, id=documento_id)
     documento.delete()
-    remover_historico('Documentos', documento_id)
+    remover_historico(request.user.username, 'Documentos', documento_id)
 
     documentos = Documentos.objects.all()
     return redirect('/documentos', {'Documentos': documentos})

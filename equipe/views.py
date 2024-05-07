@@ -24,7 +24,7 @@ def adicionar_equipe(request):
         if form.is_valid(): 
             post = form.save()
             post.save()
-            adicionar_historico('Equipe', form.id) 
+            adicionar_historico(request.user.username, 'Equipe', form.id) 
 
             pesquisador = Pesquisador.objects.all()
             return redirect('/equipe', {'Pesquisadores': pesquisador})
@@ -41,7 +41,7 @@ def atualizar_equipe(request, pesquisador_id=None):  # Aceita o parâmetro pesqu
     if request.method == 'POST':
         form = PesquisadorForm(request.POST, instance=pesquisador)  # Passa a instância do pesquisador para o formulário
         if form.is_valid():
-            atualiza_historico('Equipe', form, Pesquisador.objects.get(pk=pesquisador_id))
+            atualiza_historico(request.user.username, 'Equipe', form, Pesquisador.objects.get(pk=pesquisador_id))
             form.save()
             
             pesquisadores = Pesquisador.objects.all()
@@ -57,7 +57,7 @@ def excluir_equipe(request, pesquisador_id):
     print('aqui')
     pesquisador = get_object_or_404(Pesquisador, id=pesquisador_id)
     pesquisador.delete()
-    remover_historico('Equipe', pesquisador_id)
+    remover_historico(request.user.username, 'Equipe', pesquisador_id)
     
     pesquisadores = Pesquisador.objects.all()
     return redirect('/equipe', {'Pesquisadores': pesquisadores})

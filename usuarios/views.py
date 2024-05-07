@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as loginAuth, logout as logoutAuth
 from django.contrib.admin.views.decorators import staff_member_required 
+from historico.views import adicionar_historico, remover_historico, atualiza_historico
 
 @staff_member_required(login_url='/auth/login')
 def listar_usuarios(request):
@@ -12,22 +13,38 @@ def listar_usuarios(request):
 def atualizar_usuario(request, usuario_id):
    user = User.objects.filter(id=usuario_id).first() 
    
-   if user:
-     return render(request, 'cadastro.html', {'user': user})
-   else:
+   if request.method == 'POST':
+      userAntigo = User.objects.filter(id=usuario_id).first() 
+      
+      check = request.POST.get('admin') == 'on' if True else False
+      user.username = request.POST.get('username')
+      user.first_name = request.POST.get('primeiroNome')
+      user.last_name = request.POST.get('sobrenome')
+      user.email = request.POST.get('email')
+      user.is_staff = check
+      user.save()
+      
+      atualiza_historico(request.user.username, 'Usuário', user, userAntigo)
+      
       usuarios = User.objects.all()
       return render(request, 'usuarios.html', {'usuarios': usuarios})
+   else:
+      return render(request, 'cadastro.html', {'user': user})
 
 def excluir_usuario(request, usuario_id):
   user = User.objects.filter(id=usuario_id).first() 
   user.delete()
+  remover_historico(request.user.username, 'Usuário', user.id)
+  
   usuarios = User.objects.all()
   return render(request, 'usuarios.html', {'usuarios': usuarios})
 
 def cadastro(request):
   if request.method == 'GET':
-    return render(request, 'cadastro.html')
+    return render(request, 'cadastro.html', {'user': ''})
   else:
+    logout(request)
+    
     username = request.POST.get('username')
     primeiroNome = request.POST.get('primeiroNome')
     sobrenome = request.POST.get('sobrenome')
@@ -43,9 +60,11 @@ def cadastro(request):
       if senha!= confirmaSenha:
         return render(request, 'cadastro.html')
       
-      user = User.objects.create_user(username=username, email=email, password=senha, first_name=primeiroNome, last_name=sobrenome)
+      user = User.objects.create_user(username=username, email=email, password=senha, first_name=primeiroNome, last_name=sobrenome, is_staff=False)
       user.save()
-      return render(request, 'login.html', {'user': user})
+      adicionar_historico(user.username, 'Usuário', user.id)
+      
+      return render(request, 'login.html')
     
 def login(request):
   if request.method == 'GET':
