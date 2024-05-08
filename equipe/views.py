@@ -24,7 +24,7 @@ def adicionar_equipe(request):
         if form.is_valid(): 
             post = form.save()
             post.save()
-            adicionar_historico(request.user.username, 'Equipe', form.id) 
+            adicionar_historico(request.user.username, 'Equipe', post.id) 
 
             pesquisador = Pesquisador.objects.all()
             return redirect('/equipe', {'Pesquisadores': pesquisador})
