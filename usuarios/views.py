@@ -20,14 +20,25 @@ def atualizar_usuario(request, usuario_id):
       user.username = request.POST.get('username')
       user.first_name = request.POST.get('primeiroNome')
       user.last_name = request.POST.get('sobrenome')
+      if request.POST.get('senha'):        
+        user.set_password(request.POST.get('senha'))
+        
       user.email = request.POST.get('email')
       user.is_staff = check
       user.save()
       
-      atualiza_historico(request.user.username, 'Usuário', user, userAntigo)
+      if request.user.username == '':
+        atualiza_historico(user.username, 'Usuário', user, userAntigo)
+      else:
+        atualiza_historico(request.user, 'Usuário', user, userAntigo)
       
-      usuarios = User.objects.all()
-      return redirect('/auth/usuarios', {'usuarios': usuarios})
+      if request.user.is_staff:
+        usuarios = User.objects.all()
+        return redirect('/auth/usuarios', {'usuarios': usuarios})
+      
+      loginAuth(request, user)  
+      return redirect('/')
+      
    else:
       return render(request, 'cadastro.html', {'usuario': user})
 
@@ -48,17 +59,14 @@ def cadastro(request):
     sobrenome = request.POST.get('sobrenome')
     email = request.POST.get('email')
     senha = request.POST.get('senha')
-    confirmaSenha = request.POST.get('confirmaSenha')
+    check = request.POST.get('admin') == 'on' if True else False
     user = User.objects.filter(username=username, email=email).first()
     
     if user:
       user = ()
       return render(request, 'cadastro.html')
-    else:
-      if senha!= confirmaSenha:
-        return render(request, 'cadastro.html')
-      
-      user = User.objects.create_user(username=username, email=email, password=senha, first_name=primeiroNome, last_name=sobrenome)
+    else:      
+      user = User.objects.create_user(username=username, email=email, password=senha, first_name=primeiroNome, last_name=sobrenome, is_staff=check)
       user.save()
       
       if request.user.username != username:

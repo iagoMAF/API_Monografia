@@ -26,7 +26,7 @@
       {% csrf_token %}
 
       <div class="text-center mb-4">
-        <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+        <img class="mb-4" src="{% static 'midia/logo.png' %}" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">Cadastro Usuário</h1>
         <p>Site de monografias - Sistemas Distribuidos - 2024</p>
       </div>
@@ -63,22 +63,15 @@
         </div>
       </div>
 
-      {% if not user.is_authenticated or not usuario %}
-        <div class="form-label-group mb-3 d-flex gap-3">
+      {% if user.id == usuario.id %}
+        <div class="form-label-group mb-3">
           <div class="form-label-group flex-grow-1">
-            <input type="password" name="senha" class="form-control" placeholder="Senha..." required
-            {% if usuario %}
-            value="{{usuario.password}}"
-            {% endif %}>
-          </div>
-
-          <div class="form-label-group flex-grow-1">
-            <input type="password" name="confirmaSenha" class="form-control" placeholder="Confirmar senha..." required>
+            <input type="password" name="senha" class="form-control" placeholder="Senha..." required>
           </div>
         </div>
       {% endif %}
 
-      {% if user.is_authenticated %}
+      {% if user.is_authenticated and user.is_staff %}
         <div class="input-group mb-3">
           <div class="input-group-text d-flex justify-content-center align-items-center">
             <input class="form-check-input mt-0 ms-0" type="checkbox" {% if usuario.is_staff %} checked {% endif %} name="admin">

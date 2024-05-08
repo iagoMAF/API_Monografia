@@ -40,7 +40,6 @@ def atualiza_historico(usuario, tabela, itemAtualizado, itemAntigo):
     atualizacao = "Atualização: " 
     
     if tabela == 'Usuário':
-        print('Aqui ' + itemAntigo.first_name + ' ' + itemAntigo.last_name)
         
         if itemAntigo.username != itemAtualizado.username:
             atualizacao = atualizacao + 'username, '
@@ -52,6 +51,8 @@ def atualiza_historico(usuario, tabela, itemAtualizado, itemAntigo):
             atualizacao = atualizacao + 'e-mail, '
         if itemAntigo.is_staff != itemAtualizado.is_staff:
             atualizacao = atualizacao + 'nível de usuário, '
+        if itemAntigo.password != itemAtualizado.password:
+            atualizacao = atualizacao +'senha, '
             
         if atualizacao.endswith(", "):
             atualizacao = atualizacao[:-2]

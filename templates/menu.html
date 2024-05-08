@@ -58,9 +58,16 @@
       {% endif %}
 
     {% if user.is_authenticated %}
-      <div class="d-flex">
-        <p class="nav-link mb-0">Usuário: {{user.username}}</p>
-      </div>
+      <li class="nav-item dropdown" style="list-style: none">
+        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+         Usuário: {{user.username}}
+        </a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="{% url 'atualizar_usuario' user.id %}">Editar Perfil</a></li>
+        </ul>
+      </li>
+
+
       <div class="d-flex">
         <a class="nav-link btn btn-primary" href="{% url 'logout' %}">Sair</a>
       </div>
