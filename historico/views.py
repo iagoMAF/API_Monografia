@@ -69,7 +69,7 @@ def atualiza_historico(usuario, tabela, itemAtualizado, itemAntigo):
             {'campo': 'last_name', 'nome_exibicao': 'sobrenome'},
             {'campo': 'email', 'nome_exibicao': 'e-mail'},
             {'campo': 'is_staff', 'nome_exibicao': 'nível de usuário'},
-            {'campo': 'password', 'nome_exibicao': 'senha, '},
+            {'campo': 'password', 'nome_exibicao': 'senha'},
         ]
     
     for campo_info in campos:
