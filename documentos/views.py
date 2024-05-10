@@ -95,7 +95,6 @@ def listar_documentosAPI(request):
         serializer = DocumentosSerializer(documentos, many=True)
         return Response(serializer.data)
 
-
 @swagger_auto_schema(method='get', responses={200:openapi.Response("Documento", DocumentosSerializer())}, tags=["Documentos"])
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])

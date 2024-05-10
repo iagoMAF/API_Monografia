@@ -6,11 +6,12 @@ from django.contrib.admin.views.decorators import staff_member_required
 from historico.views import adicionar_historico, remover_historico, atualiza_historico
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
-from rest_framework.decorators import api_view 
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from django.contrib.auth.decorators import login_required
 from .serializer import UserSerializer
+import rest_framework.permissions as permissions
 
 @staff_member_required(login_url='/auth/login')
 def listar_usuarios(request):
@@ -49,8 +50,6 @@ def atualizar_usuario(request, usuario_id):
    else:
       return render(request, 'cadastro.html', {'usuario': user})
 
-
-
 def excluir_usuario(request, usuario_id):
   user = User.objects.filter(id=usuario_id).first() 
   user.delete()
@@ -58,7 +57,6 @@ def excluir_usuario(request, usuario_id):
   
   usuarios = User.objects.all()
   return render(request, 'usuarios.html', {'usuarios': usuarios})
-
 
 def cadastro(request):
   if request.method == 'GET':
@@ -86,8 +84,6 @@ def cadastro(request):
       
       adicionar_historico(user.username, 'Usuário', user.id)
       return render(request, 'login.html')
-    
-
 
 def login(request):
   if request.method == 'GET':
@@ -105,14 +101,13 @@ def login(request):
     else:
       return render(request, 'login.html', {'error': 'E-mail ou Senha invalidos'})
 
-
 def logout(request):
   logoutAuth(request)
   return redirect('/')
-
 # API
 @swagger_auto_schema(methods=['GET'], operation_summary="Listar Todos os usuarios", tags=['Usuário'])
 @api_view(['GET'])
+@permission_classes([permissions.IsAdminUser]) 
 def listar_usuariosJson(request):
     """
     Lista todos os usuários.
@@ -123,6 +118,7 @@ def listar_usuariosJson(request):
 
 @swagger_auto_schema(methods=['POST'], operation_summary="Cadastrar um novo Usuario", request_body=UserSerializer, tags=['Usuário'])
 @api_view(['POST'])
+@permission_classes([permissions.IsAdminUser]) 
 def cadastroJson(request):
     """
     Cadastra um novo usuário.
@@ -135,7 +131,7 @@ def cadastroJson(request):
 
 @swagger_auto_schema(methods=['GET'], operation_summary="Detalhar um usuário", tags=['Usuário'])
 @api_view(['GET'])
-
+@permission_classes([permissions.IsAdminUser]) 
 def detalhe_usuarioJson(request,usuario_id):
    """
    Retorna detalhes de um usuário específico
@@ -150,6 +146,7 @@ def detalhe_usuarioJson(request,usuario_id):
 
 @swagger_auto_schema(methods=['PUT', 'PATCH'], operation_summary="Atualizar um usuario existente", request_body=UserSerializer, tags=['Usuário'])
 @api_view(['PUT', 'PATCH'])
+@permission_classes([permissions.IsAdminUser]) 
 def atualizar_usuarioJson(request, usuario_id):
     """
     Atualiza os detalhes de um  usuário específico.
@@ -165,6 +162,9 @@ def atualizar_usuarioJson(request, usuario_id):
       return Response(serializer.data)
     return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
+@swagger_auto_schema(methods=['DELETE'], operation_summary="Exclui um usuario existente", request_body=UserSerializer, tags=['Usuário'])
+@api_view(['DELETE'])
+@permission_classes([permissions.IsAdminUser]) 
 def excluir_usuarioJson(request, usuario_id):
    """
   Exclui um usuário   
