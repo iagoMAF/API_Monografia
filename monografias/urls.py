@@ -5,9 +5,9 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Sua API",
+        title="Api monografias",
         default_version='v1',
-        description="Descrição da sua API",
+        description="Api de acesso ao sistema de registro de monografias - SD2024/1",
         terms_of_service="https://www.example.com/policies/terms/",
         contact=openapi.Contact(email="contact@example.com"),
         license=openapi.License(name="BSD License"),
