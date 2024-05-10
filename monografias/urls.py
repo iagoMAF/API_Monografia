@@ -18,11 +18,11 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
-    path('equipe/', include('equipe.urls')), 
-    path('historico/', include('historico.urls')),
-    path('pdfs/', include('documentos.urls')),   # Mantém a rota pdfs/ funcional
-    path('documentos/', include('documentos.urls')),
-    path('auth/', include('usuarios.urls')), 
+    path('', include('equipe.urls')), 
+    path('', include('historico.urls')),
+    #path('/', include('documentos.urls')),   # Mantém a rota pdfs/ funcional
+    path('', include('documentos.urls')),
+    path('', include('usuarios.urls')), 
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]

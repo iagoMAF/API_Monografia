@@ -82,7 +82,7 @@ def excluir_documento(request, documento_id):
     documentos = Documentos.objects.all()
     return redirect('/documentos', {'Documentos': documentos})
 
-@swagger_auto_schema(method='get', responses={200: openapi.Response("List of Documentos", DocumentosSerializer(many=True))}, tags=['documentos'])
+@swagger_auto_schema(method='get', responses={200: openapi.Response("List of Documentos", DocumentosSerializer(many=True))}, tags=['Documentos'])
 @api_view(['GET'])
 def listar_documentosAPI(request):
     """
@@ -94,8 +94,19 @@ def listar_documentosAPI(request):
         return Response(serializer.data)
 
 
+@swagger_auto_schema(method='get', responses={200:openapi.Response("Documento", DocumentosSerializer())}, tags=["Documentos"])
+@api_view(['GET'])
+def detalhe_documento(request,pk):
+    try:
+        documento = Documentos.objects.get(pk=pk)
+    except Documentos.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    serializer = DocumentosSerializer(documento)
+    return Response(serializer.data)
+
+@swagger_auto_schema(methods=['delete','put','patch'], responses={200:openapi.Response("Documento", DocumentosSerializer())}, tags=["Documentos"])
 @api_view(['DELETE', 'PUT', 'PATCH'])
-def detalhe_documento(request, pk):
+def atualiza_documento(request, pk):
     try:
         documento = Documentos.objects.get(pk=pk)
     except Documentos.DoesNotExist:

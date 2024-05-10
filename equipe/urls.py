@@ -2,10 +2,10 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.listar_equipe, name='listar_equipe'),
-    path('adicionar/', views.adicionar_equipe, name='adicionar_equipe'),
-    path('atualizar/<int:pesquisador_id>/', views.atualizar_equipe, name='atualizar_equipe'),
-    path('excluir/<int:pesquisador_id>/', views.excluir_equipe, name='excluir_equipe'),
+    path('pesquisadores/', views.listar_equipe, name='listar_equipe'),
+    path('pesquisadores/adicionar/', views.adicionar_equipe, name='adicionar_equipe'),
+    path('pesquisadores/atualizar/<int:pesquisador_id>/', views.atualizar_equipe, name='atualizar_equipe'),
+    path('pesquisadores/excluir/<int:pesquisador_id>/', views.excluir_equipe, name='excluir_equipe'),
     
     # API
     path('api/pesquisadores/', views.listar_pesquisadoresJson, name='listar_pesquisadoresJson'),
