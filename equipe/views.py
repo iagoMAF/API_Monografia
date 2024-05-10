@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Pesquisador
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
-from rest_framework.decorators import api_view 
+from rest_framework.decorators import api_view,permission_classes
 from rest_framework import status
 from .serializer import PesquisadorSerializer
 from drf_yasg.utils import swagger_auto_schema
@@ -11,6 +11,7 @@ from .forms import PesquisadorForm
 from historico.models import Historico
 from historico.views import adicionar_historico, remover_historico, atualiza_historico
 from django.contrib.auth.decorators import login_required
+import rest_framework.permissions as permissions
 
 def listar_equipe(request):
     pesquisadores = Pesquisador.objects.all()
@@ -63,8 +64,9 @@ def excluir_equipe(request, pesquisador_id):
     return redirect('/equipe', {'Pesquisadores': pesquisadores})
 
 # API
-@swagger_auto_schema(methods=['GET'], operation_summary="Listar todos os pesquisadores", tags=['Equipe'])
+@swagger_auto_schema( methods=['GET'], operation_summary="Listar todos os pesquisadores", tags=['Equipe'])
 @api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated]) 
 def listar_pesquisadoresJson(request):
     """
     Lista todos os pesquisadores.
@@ -75,6 +77,7 @@ def listar_pesquisadoresJson(request):
 
 @swagger_auto_schema(methods=['POST'], operation_summary="Cadastrar um novo pesquisador", request_body=PesquisadorSerializer, tags=['Equipe'])
 @api_view(['POST'])
+@permission_classes([permissions.IsAdmin])
 def cadastrar_pesquisadorJson(request):
     """
     Cadastra um novo pesquisador.
@@ -87,6 +90,7 @@ def cadastrar_pesquisadorJson(request):
 
 @swagger_auto_schema(methods=['GET'], operation_summary="Detalhar um pesquisador", tags=['Equipe'])
 @api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated]) 
 def detalhe_pesquisadorJson(request, pk):
     """
     Retorna os detalhes de um pesquisador específico.
@@ -101,6 +105,7 @@ def detalhe_pesquisadorJson(request, pk):
 
 @swagger_auto_schema(methods=['PUT', 'PATCH'], operation_summary="Atualizar um pesquisador existente", request_body=PesquisadorSerializer, tags=['Equipe'])
 @api_view(['PUT', 'PATCH'])
+@permission_classes([permissions.IsAdmin])
 def atualizar_pesquisadorJson(request, pk):
     """
     Atualiza os detalhes de um pesquisador existente.
@@ -118,6 +123,7 @@ def atualizar_pesquisadorJson(request, pk):
 
 @swagger_auto_schema(methods=['DELETE'], operation_summary="Excluir um pesquisador existente", tags=['Equipe'])
 @api_view(['DELETE'])
+@permission_classes([permissions.IsAdmin])
 def excluir_pesquisadorJson(request, pk):
     """
     Exclui um pesquisador existente.
