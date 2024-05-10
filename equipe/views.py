@@ -77,7 +77,7 @@ def listar_pesquisadoresJson(request):
 
 @swagger_auto_schema(methods=['POST'], operation_summary="Cadastrar um novo pesquisador", request_body=PesquisadorSerializer, tags=['Equipe'])
 @api_view(['POST'])
-@permission_classes([permissions.IsAdmin])
+@permission_classes([permissions.IsAdminUser])
 def cadastrar_pesquisadorJson(request):
     """
     Cadastra um novo pesquisador.
@@ -105,7 +105,7 @@ def detalhe_pesquisadorJson(request, pk):
 
 @swagger_auto_schema(methods=['PUT', 'PATCH'], operation_summary="Atualizar um pesquisador existente", request_body=PesquisadorSerializer, tags=['Equipe'])
 @api_view(['PUT', 'PATCH'])
-@permission_classes([permissions.IsAdmin])
+@permission_classes([permissions.IsAdminUser])
 def atualizar_pesquisadorJson(request, pk):
     """
     Atualiza os detalhes de um pesquisador existente.
@@ -123,7 +123,7 @@ def atualizar_pesquisadorJson(request, pk):
 
 @swagger_auto_schema(methods=['DELETE'], operation_summary="Excluir um pesquisador existente", tags=['Equipe'])
 @api_view(['DELETE'])
-@permission_classes([permissions.IsAdmin])
+@permission_classes([permissions.IsAdminUser])
 def excluir_pesquisadorJson(request, pk):
     """
     Exclui um pesquisador existente.

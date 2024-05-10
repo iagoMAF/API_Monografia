@@ -6,7 +6,7 @@ from django.urls import reverse
 from documentos.functions import handle_uploaded_file
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 from .serializer import DocumentosSerializer
 from django.shortcuts import render
@@ -17,6 +17,7 @@ from drf_yasg.utils import swagger_auto_schema
 from historico.models import Historico
 from historico.views import adicionar_historico, remover_historico, atualiza_historico
 from django.contrib.auth.decorators import login_required
+import rest_framework.permissions as permissions
 
 def view_pdf(request, filename):
     pdf_path = os.path.join('documentos/pdfs', filename)
@@ -84,6 +85,7 @@ def excluir_documento(request, documento_id):
 
 @swagger_auto_schema(method='get', responses={200: openapi.Response("List of Documentos", DocumentosSerializer(many=True))}, tags=['Documentos'])
 @api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
 def listar_documentosAPI(request):
     """
     Listar todos os documentos.
@@ -96,6 +98,7 @@ def listar_documentosAPI(request):
 
 @swagger_auto_schema(method='get', responses={200:openapi.Response("Documento", DocumentosSerializer())}, tags=["Documentos"])
 @api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
 def detalhe_documento(request,pk):
     try:
         documento = Documentos.objects.get(pk=pk)
@@ -106,6 +109,7 @@ def detalhe_documento(request,pk):
 
 @swagger_auto_schema(methods=['delete','put','patch'], responses={200:openapi.Response("Documento", DocumentosSerializer())}, tags=["Documentos"])
 @api_view(['DELETE', 'PUT', 'PATCH'])
+@permission_classes([permissions.IsAdminUser])
 def atualiza_documento(request, pk):
     try:
         documento = Documentos.objects.get(pk=pk)
