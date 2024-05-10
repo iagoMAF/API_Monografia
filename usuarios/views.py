@@ -4,6 +4,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as loginAuth, logout as logoutAuth
 from django.contrib.admin.views.decorators import staff_member_required 
 from historico.views import adicionar_historico, remover_historico, atualiza_historico
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.response import Response
+from rest_framework.decorators import api_view 
+from rest_framework import status
+from drf_yasg.utils import swagger_auto_schema
+from django.contrib.auth.decorators import login_required
+from .serializer import UserSerializer
 
 @staff_member_required(login_url='/auth/login')
 def listar_usuarios(request):
@@ -42,6 +49,8 @@ def atualizar_usuario(request, usuario_id):
    else:
       return render(request, 'cadastro.html', {'usuario': user})
 
+
+
 def excluir_usuario(request, usuario_id):
   user = User.objects.filter(id=usuario_id).first() 
   user.delete()
@@ -49,6 +58,7 @@ def excluir_usuario(request, usuario_id):
   
   usuarios = User.objects.all()
   return render(request, 'usuarios.html', {'usuarios': usuarios})
+
 
 def cadastro(request):
   if request.method == 'GET':
@@ -77,6 +87,8 @@ def cadastro(request):
       adicionar_historico(user.username, 'Usuário', user.id)
       return render(request, 'login.html')
     
+
+
 def login(request):
   if request.method == 'GET':
     return render(request, 'login.html')
@@ -92,7 +104,81 @@ def login(request):
       return redirect('/')
     else:
       return render(request, 'login.html', {'error': 'E-mail ou Senha invalidos'})
-    
+
+
 def logout(request):
   logoutAuth(request)
   return redirect('/')
+
+# API
+@swagger_auto_schema(methods=['GET'], operation_summary="Listar Todos os usuarios", tags=['Usuário'])
+@api_view(['GET'])
+def listar_usuariosJson(request):
+    """
+    Lista todos os usuários.
+    """
+    usuarios = User.objects.all()
+    serializer = UserSerializer(usuarios, many=True)
+    return Response(serializer.data)
+
+@swagger_auto_schema(methods=['POST'], operation_summary="Cadastrar um novo Usuario", request_body=UserSerializer, tags=['Usuário'])
+@api_view(['POST'])
+def cadastroJson(request):
+    """
+    Cadastra um novo usuário.
+    """
+    serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@swagger_auto_schema(methods=['GET'], operation_summary="Detalhar um usuário", tags=['Usuário'])
+@api_view(['GET'])
+
+def detalhe_usuarioJson(request,usuario_id):
+   """
+   Retorna detalhes de um usuário específico
+   """
+   try:
+      usuario = User.objects.get(pk=usuario_id)
+   except User.DoesNotExist:
+      return Response(status=status.HTTP_404_NOT_FOUND)
+   
+   serializer=UserSerializer(usuario)
+   return Response(serializer.data)
+
+@swagger_auto_schema(methods=['PUT', 'PATCH'], operation_summary="Atualizar um usuario existente", request_body=UserSerializer, tags=['Usuário'])
+@api_view(['PUT', 'PATCH'])
+def atualizar_usuarioJson(request, usuario_id):
+    """
+    Atualiza os detalhes de um  usuário específico.
+    """
+    try:
+        user = User.objects.get(pk = usuario_id)
+    except User.DoesNotExist:
+       return Response(status=status.HTTP_404_NOT_FOUND)
+
+    serializer = UserSerializer(user, data=request.data, partial = True)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+def excluir_usuarioJson(request, usuario_id):
+   """
+  Exclui um usuário   
+   """
+   try:
+      user = User.objects.get(usuario_id = usuario_id)
+   except User.DoesNotExist:
+      return Response(status=status.HTTP_404_NOT_FOUND)
+   
+   user.delete()
+   return Response(status = status.HTTP_204_NO_CONTENT)
+
+
+
+#def loginJson(request):
+  
+#def logoutJson(request):
