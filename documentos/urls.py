@@ -9,7 +9,9 @@ urlpatterns = [
     path('documentos/excluir/<int:documento_id>/', views.excluir_documento, name='excluir_documento'),
     
     # API
+    path('api/documentos/cadastrar', views.adicionar_documentoAPI, name='adicionar_documentoAPI'),
     path('api/documentos/', views.listar_documentosAPI, name='listar_documentosAPI'),
     path('api/documentos/<int:pk>/', views.atualiza_documento, name='atualiza_documento'),
     path('api/documentos/<int:pk>/', views.detalhe_documento, name='detalhe_documento'),
+    path('api/documentos/upload/<int:pk>', views.FileUploadView.as_view())
 ] 

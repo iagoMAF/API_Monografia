@@ -28,7 +28,7 @@ def adicionar_equipe(request):
             adicionar_historico(request.user.username, 'Equipe', post.id) 
 
             pesquisador = Pesquisador.objects.all()
-            return redirect('/equipe', {'Pesquisadores': pesquisador})
+            return redirect('/pesquisadores', {'Pesquisadores': pesquisador})
         
     return render(request, 'adicionar_pesquisador.html', {'form': form, 'edicao_equipe': False})
     

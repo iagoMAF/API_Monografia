@@ -7,6 +7,8 @@ from documentos.functions import handle_uploaded_file
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework import views
+from rest_framework.parsers import MultiPartParser
 from rest_framework import status
 from .serializer import DocumentosSerializer
 from django.shortcuts import render
@@ -95,6 +97,17 @@ def listar_documentosAPI(request):
         serializer = DocumentosSerializer(documentos, many=True)
         return Response(serializer.data)
 
+@swagger_auto_schema(methods=['post'], responses={200:openapi.Response("Documento", DocumentosSerializer())}, request_body=DocumentosSerializer, tags=["Documentos"])
+@api_view(['POST'])
+@permission_classes([permissions.IsAdminUser])
+def adicionar_documentoAPI(request):
+    serializer = DocumentosSerializer(data = request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 @swagger_auto_schema(method='get', responses={200:openapi.Response("Documento", DocumentosSerializer())}, tags=["Documentos"])
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
@@ -127,3 +140,18 @@ def atualiza_documento(request, pk):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+
+
+class FileUploadView(views.APIView):
+    parser_classes = [MultiPartParser]
+
+    @swagger_auto_schema(manual_parameters=[openapi.Parameter(name="file",in_=openapi.IN_FORM,type=openapi.TYPE_FILE,required=True,description="Document")], responses={200:openapi.Response("Documento", DocumentosSerializer())}, tags=["Documentos"])
+    @permission_classes([permissions.IsAuthenticated])
+    def put(self, request, pk, format=None):
+        file_obj = request.data['file']
+        documento = Documentos.objects.get(pk = pk)
+        if file_obj:
+            documento.arquivo = file_obj
+            documento.save()
+            return Response(status=204)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
