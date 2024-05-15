@@ -1,0 +1,13 @@
+asgiref==3.8.1
+Django==5.0.3
+psycopg2-binary==2.9.9
+pytz==2022.1
+sqlparse==0.4.4
+typing_extensions==4.11.0
+django-crispy-forms==2.1
+crispy-bootstrap5==2024.2
+django-widget-tweaks==1.5.0
+djangorestframework==3.15.1
+djangorestframework_simplejwt==4.11
+drf-yasg==1.21.7
+
