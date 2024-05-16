@@ -98,18 +98,19 @@ def listar_documentosAPI(request):
         serializer = DocumentosSerializer(documentos, many=True)
         return Response(serializer.data)
 
-@swagger_auto_schema(methods=['post'], responses={200:openapi.Response("Documento", DocumentosSerializer())}, request_body=DocumentosSerializer, tags=["Documentos"], operation_summary='Lista um documento existente')
+@swagger_auto_schema(methods=['post'], responses={200:openapi.Response("Documento", DocumentosSerializer())}, request_body=DocumentosSerializer, tags=["Documentos"], operation_summary='Cadastra um novo documento')
 @api_view(['POST'])
 @permission_classes([permissions.IsAdminUser])
 def adicionar_documentoAPI(request):
     serializer = DocumentosSerializer(data = request.data)
     if serializer.is_valid():
         serializer.save()
+        adicionar_historico(request.user.username, 'Documentos', serializer.data['id'])
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@swagger_auto_schema(method='get', responses={200:openapi.Response("Documento", DocumentosSerializer())}, tags=["Documentos"])
+@swagger_auto_schema(method='get', responses={200:openapi.Response("Documento", DocumentosSerializer())}, tags=["Documentos"], operation_summary='Detalhar um documento')
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def detalhe_documento(request,pk):
@@ -172,7 +173,7 @@ def cadastra_documento(request):
 class FileUploadView(views.APIView):
     parser_classes = [MultiPartParser]
 
-    @swagger_auto_schema(manual_parameters=[openapi.Parameter(name="file",in_=openapi.IN_FORM,type=openapi.TYPE_FILE,required=True,description="Document")], responses={200:openapi.Response("Documento", DocumentosSerializer())}, tags=["Documentos"])
+    @swagger_auto_schema(manual_parameters=[openapi.Parameter(name="file",in_=openapi.IN_FORM,type=openapi.TYPE_FILE,required=True,description="Document")], responses={200:openapi.Response("Documento", DocumentosSerializer())}, tags=["Documentos"], operation_summary='Faz o upload do arquivo e vincula a um documento existente')
     @permission_classes([permissions.IsAuthenticated])
     def put(self, request, pk, format=None):
         file_obj = request.data['file']
