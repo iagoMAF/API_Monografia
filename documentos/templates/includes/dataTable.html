@@ -11,7 +11,7 @@
       <th scope="col">Data</th>
       <th scope="col">Área de Concentração</th>
       <th scope="col">Arquivo</th>
-      {% if user.is_authenticated %}
+      {% if user.is_staff  %}
         <th scope="col">Ações</th>
       {% endif %}
     </tr>
@@ -46,7 +46,7 @@
       <td>Nenhum arquivo disponível</td>
       {% endif %}
 
-      {% if user.is_authenticated %}
+      {% if user.is_staff %}
         <td>
           <a class="btn btn-primary" href="{% url 'atualizar_documento' documento.id %}">
             <img src="{% static 'midia/edit.svg' %}" alt="Icone de Editar">

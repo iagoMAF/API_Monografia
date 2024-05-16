@@ -13,11 +13,12 @@ from django.contrib.auth.decorators import login_required
 from .serializer import UserSerializer
 import rest_framework.permissions as permissions
 
-@staff_member_required(login_url='/auth/login')
+@staff_member_required(login_url='/login')
 def listar_usuarios(request):
   usuarios = User.objects.all()
   return render(request, 'usuarios.html', {'usuarios': usuarios})
 
+@login_required(login_url="/login")
 def atualizar_usuario(request, usuario_id):
    user = User.objects.filter(id=usuario_id).first() 
    
@@ -50,6 +51,7 @@ def atualizar_usuario(request, usuario_id):
    else:
       return render(request, 'cadastro.html', {'usuario': user})
 
+@staff_member_required(login_url='/login')
 def excluir_usuario(request, usuario_id):
   user = User.objects.filter(id=usuario_id).first() 
   user.delete()
@@ -76,12 +78,7 @@ def cadastro(request):
     else:      
       user = User.objects.create_user(username=username, email=email, password=senha, first_name=primeiroNome, last_name=sobrenome, is_staff=check)
       user.save()
-      
-      if request.user.username != username:
-        adicionar_historico(request.user.username, 'Usuário', user.id)
-        usuarios = User.objects.all()
-        return render(request, 'usuarios.html', {'usuarios': usuarios})
-      
+            
       adicionar_historico(user.username, 'Usuário', user.id)
       return render(request, 'login.html')
 
@@ -126,6 +123,7 @@ def cadastroJson(request):
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
+        adicionar_historico(request.user.username, 'Usuário', serializer.data['id'])
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -158,7 +156,9 @@ def atualizar_usuarioJson(request, usuario_id):
 
     serializer = UserSerializer(user, data=request.data, partial = True)
     if serializer.is_valid():
+      userAntigo = User.objects.get(pk=usuario_id)
       serializer.save()
+      atualiza_historico(request.user.username, 'Usuário', serializer, userAntigo)
       return Response(serializer.data)
     return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
@@ -173,8 +173,9 @@ def excluir_usuarioJson(request, usuario_id):
       user = User.objects.get(usuario_id = usuario_id)
    except User.DoesNotExist:
       return Response(status=status.HTTP_404_NOT_FOUND)
-   
+   user_id = user.id
    user.delete()
+   remover_historico(request.user.username, 'Usuário', user_id)
    return Response(status = status.HTTP_204_NO_CONTENT)
 
 

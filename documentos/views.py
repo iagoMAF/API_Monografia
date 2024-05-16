@@ -18,6 +18,7 @@ from historico.models import Historico
 from historico.views import adicionar_historico, remover_historico, atualiza_historico
 from django.contrib.auth.decorators import login_required
 import rest_framework.permissions as permissions
+from django.contrib.admin.views.decorators import staff_member_required 
 
 def view_pdf(request, filename):
     pdf_path = os.path.join('documentos/pdfs', filename)
@@ -30,7 +31,7 @@ def listar_documentos(request):
     documentos = Documentos.objects.all()
     return render(request, 'documentosDataTable.html', {'documentos': documentos})
 
-@login_required(login_url="/auth/login/")
+@staff_member_required(login_url='/login')
 def adicionar_documento(request):
     form = DocumentosForm(request.POST, request.FILES)
     if request.method == 'POST':
@@ -53,7 +54,7 @@ def adicionar_documento(request):
         
     return render(request, 'adicionar_documento.html', {'form': form, 'editar_documento': False})
 
-@login_required(login_url="/auth/login/")
+@staff_member_required(login_url='/login')
 def atualizar_documento(request, documento_id=None):  # Aceita o parâmetro documento_id
     # Se o documento_id for fornecido, recuperar o documento correspondente
     documento = None
@@ -74,7 +75,7 @@ def atualizar_documento(request, documento_id=None):  # Aceita o parâmetro docu
     documentos = Documentos.objects.all()
     return render(request, 'adicionar_documento.html', {'form': form, 'documentos': documentos, 'documento_id': documento_id, 'editar_documento': True})
 
-@login_required(login_url="/auth/login/")
+@staff_member_required(login_url='/login')
 def excluir_documento(request, documento_id):
     documento = get_object_or_404(Documentos, id=documento_id)
     documento.delete()
@@ -83,8 +84,8 @@ def excluir_documento(request, documento_id):
     documentos = Documentos.objects.all()
     return redirect('/documentos', {'Documentos': documentos})
 
-@swagger_auto_schema(method='get', responses={200: openapi.Response("List of Documentos", DocumentosSerializer(many=True))}, tags=['Documentos'])
-@api_view(['GET'])
+@swagger_auto_schema(method='get', responses={200: openapi.Response("List of Documentos", DocumentosSerializer(many=True))}, tags=['Documentos'], operation_summary='Lista todos os documentos existentes')
+@api_view(['GET'],)
 @permission_classes([permissions.IsAuthenticated])
 def listar_documentosAPI(request):
     """
@@ -95,7 +96,7 @@ def listar_documentosAPI(request):
         serializer = DocumentosSerializer(documentos, many=True)
         return Response(serializer.data)
 
-@swagger_auto_schema(method='get', responses={200:openapi.Response("Documento", DocumentosSerializer())}, tags=["Documentos"])
+@swagger_auto_schema(method='get', responses={200:openapi.Response("Documento", DocumentosSerializer())}, tags=["Documentos"], operation_summary='Lista um documento existente')
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def detalhe_documento(request,pk):
@@ -106,8 +107,8 @@ def detalhe_documento(request,pk):
     serializer = DocumentosSerializer(documento)
     return Response(serializer.data)
 
-@swagger_auto_schema(methods=['delete','put','patch'], responses={200:openapi.Response("Documento", DocumentosSerializer())}, tags=["Documentos"])
-@api_view(['DELETE', 'PUT', 'PATCH'])
+@swagger_auto_schema(methods=['put','patch'], request_body=DocumentosSerializer, tags=["Documentos"], operation_summary='Atualiza um documento existente')
+@api_view(['PUT', 'PATCH'])
 @permission_classes([permissions.IsAdminUser])
 def atualiza_documento(request, pk):
     try:
@@ -115,15 +116,41 @@ def atualiza_documento(request, pk):
     except Documentos.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'DELETE':
-        documento.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    serializer = DocumentosSerializer(documento, data=request.data, partial=True)
+    docAntigo = Documentos.objects.get(pk=pk)
+    if serializer.is_valid():
+        serializer.save()
+        # TODO: Verificar a rota de atualiza da API
+       
+        atualiza_historico(request.user.username, 'Documento', serializer, docAntigo)
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method in ['PUT', 'PATCH']:
-        serializer = DocumentosSerializer(documento, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@swagger_auto_schema(methods=['delete'], responses={200:openapi.Response("Documento", DocumentosSerializer())}, tags=["Documentos"], operation_summary='Deleta um documento existente')
+@api_view(['DELETE'])
+@permission_classes([permissions.IsAdminUser])
+def exclui_documento(request, pk):
+    try:
+        documento = Documentos.objects.get(pk=pk)
+    except Documentos.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
+    documento_id = documento.id
+    documento.delete()
+    remover_historico(request.user.username, 'Documentos', documento_id)
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
+# @swagger_auto_schema(methods=['POST'], operation_summary="Cadastrar um novo", request_body=DocumentosSerializer, tags=['Documentos'])
+@swagger_auto_schema(methods=['post'], responses={200:openapi.Response("Documento", DocumentosSerializer())}, request_body=DocumentosSerializer, tags=["Documentos"], operation_summary='Cadastra novo Documento')
+@api_view(['POST'])
+@permission_classes([permissions.IsAdminUser])
+def cadastra_documento(request):
+    """
+    Cadastra um novo documento.
+    """
+    serializer = DocumentosSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        adicionar_historico(request.user.username, 'Documentos', serializer.data['id'])
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

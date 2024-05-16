@@ -4,7 +4,7 @@
 <section style="margin: 60px">
   <div class="d-flex justify-content-between mb-2">
     <h1>Equipe</h1>
-    {% if user.is_authenticated %}
+    {% if user.is_staff %}
       <a class="btn btn-primary d-flex align-items-center font-weight-bold" href="{% url 'adicionar_equipe' %}">Adicionar</a>
     {% endif %}
   </div>

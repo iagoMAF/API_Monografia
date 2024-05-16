@@ -12,7 +12,7 @@
       <th scope="col">Data de Cadastro</th>
       <th scope="col">Ativo</th>
 
-      {% if user.is_authenticated %}
+      {% if user.is_staff %}
         <th scope="col">Ações</th>
       {% endif %}
     </tr>
@@ -51,7 +51,7 @@
       <td>Desativado</td>
       {% endif %}
 
-      {% if user.is_authenticated %}
+      {% if user.is_staff %}
         <td>
           <a class="btn btn-primary" href="{% url 'atualizar_equipe' pesquisador.id %}">
             <img src="{% static 'midia/edit.svg' %}" alt="Icone de Editar">
