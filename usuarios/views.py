@@ -43,7 +43,7 @@ def atualizar_usuario(request, usuario_id):
       
       if request.user.is_staff:
         usuarios = User.objects.all()
-        return redirect('/auth/usuarios', {'usuarios': usuarios})
+        return redirect('/usuarios', {'usuarios': usuarios})
       
       loginAuth(request, user)  
       return redirect('/')

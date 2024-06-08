@@ -47,7 +47,7 @@ def atualizar_equipe(request, pesquisador_id=None):  # Aceita o parâmetro pesqu
             form.save()
             
             pesquisadores = Pesquisador.objects.all()
-            return redirect('/equipe', {'Pesquisadores': pesquisadores})
+            return redirect('/pesquisadores', {'Pesquisadores': pesquisadores})
     else:
         form = PesquisadorForm(instance=pesquisador)  # Passa a instância do pesquisador para o formulário
 
@@ -62,7 +62,7 @@ def excluir_equipe(request, pesquisador_id):
     remover_historico(request.user.username, 'Equipe', pesquisador_id)
     
     pesquisadores = Pesquisador.objects.all()
-    return redirect('/equipe', {'Pesquisadores': pesquisadores})
+    return redirect('/pesquisadores', {'Pesquisadores': pesquisadores})
 
 # API
 @swagger_auto_schema( methods=['GET'], operation_summary="Listar todos os pesquisadores", tags=['Equipe'])

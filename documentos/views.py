@@ -30,8 +30,9 @@ def view_pdf(request, filename):
         return HttpResponseNotFound('PDF not found')
     
 def listar_documentos(request):
-    documentos = Documentos.objects.all()
-    return render(request, 'documentosDataTable.html', {'documentos': documentos})
+    documentos = Documentos.objects.all() #peguei todos os docs
+    print(documentos)
+    return render(request, 'documentosDataTable.html', {'Documentos': documentos}) #mandei os docs para esse html la eu recebo e renderizo
 
 @staff_member_required(login_url='/login')
 def adicionar_documento(request):

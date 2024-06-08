@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'documentos',
     'usuarios',
     'drf_yasg',
+    'dashboard',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
@@ -96,7 +97,7 @@ DATABASES = {
         'USER': 'root',  # Nome do usuário
         'PASSWORD': 'root',  # Senha do usuário
         'HOST': 'localhost',  # Host onde o PostgreSQL está em execução (no caso de usar Docker Compose localmente, "localhost" funciona)
-        'PORT': '5434',  # Porta exposta pelo Docker Compose
+        'PORT': '3000',  # Porta exposta pelo Docker Compose
     }
 }
 

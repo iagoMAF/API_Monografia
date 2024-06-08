@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('home.urls')),
     path('', include('equipe.urls')), 
     path('', include('historico.urls')),
+    path('', include('dashboard.urls')),
     #path('/', include('documentos.urls')),   # Mantém a rota pdfs/ funcional
     path('', include('documentos.urls')),
     path('', include('usuarios.urls')),  
