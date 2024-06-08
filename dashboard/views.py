@@ -4,6 +4,8 @@ from documentos.models import Documentos
 from documentos.forms import DocumentosForm
 from equipe.models import Pesquisador
 from django.db.models import Count
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
 
 
 
@@ -29,6 +31,14 @@ def show_dashboard(request):
     autores = Pesquisador.objects.annotate(num_documentos=Count('autor_requests_created')).order_by('-num_documentos')
     nomes_autores = [autor.nome for autor in autores]
     documentos_por_autor = [autor.num_documentos for autor in autores]
+
+    #nuvem de palavras 
+    palavras_chaves = ' '.join([doc.palavrasChaves for doc in Documentos.objects.all()])
+    wordcloud = WordCloud(background_color='white', width=800, height=400).generate(palavras_chaves)
+
+    # Salve a imagem em um arquivo
+    wordcloud.to_file('dashboard/static/images/wordcloud.png')
+
 
 
     context = {
