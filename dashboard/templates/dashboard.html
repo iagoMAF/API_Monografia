@@ -5,11 +5,11 @@
 {% block title %} Página de Monografias {% endblock %}
 
 {% block content %}
-<section style="margin: 60px">
+<section style="margin: 30px">
     <h1>Dashboard</h1>
 
     
-    <div style="display: grid; grid-template-columns: 1fr 1fr; grid-column-gap: 30px;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 30px;">
         <!-- Gráfico de barras -->
         <div>
             <h2 style="margin-bottom: 60px;">Número de documentos por área de concentração</h2>
@@ -19,6 +19,14 @@
         <div>
             <h2 style="margin-bottom: 60px;">Distribuição dos pesquisadores por titulação</h2>
             <canvas id="pieChart" style="max-width: 400px; max-height: 400px;"></canvas>
+        </div>
+        <div>
+            <h2>Quantidade de documentos por nota obtida</h2>
+            <canvas id="documentosPorNotaChart" style="max-width: 400px; max-height: 400px;"></canvas>
+        </div>
+        <div>
+            <h2>Quantidade de documentos por autor</h2>
+            <canvas id="documentosPorAutorChart" style="max-width: 400px; max-height: 400px;"></canvas>
         </div>
     </div>
     <script>
@@ -30,7 +38,7 @@
         data: {
             labels: areas,
             datasets: [{
-                label: '# de Documentos por Área',
+                label: 'Quantidade de Documentos por Área',
                 data: documentos_por_area,
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
@@ -74,6 +82,55 @@
         },
     });
     </script>
+    <script>
+        var ctx = document.getElementById('documentosPorNotaChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ notas|safe }},
+                datasets: [{
+                    label: 'Quantidade de Documentos por Nota',
+                    data: {{ quantidade_documentos|safe }},
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Quantidade de documentos'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Nota Obtida'
+                        }
+                    }
+                }
+            }
+        });
+        </script>
+        <script>
+            var ctx = document.getElementById('documentosPorAutorChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: {{ nomes_autores|safe }},
+                    datasets: [{
+                        label: 'Quantidade de Documentos por Autor',
+                        data: {{ documentos_por_autor|safe }},
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+            });
+            </script>
 </section>
     
 {% endblock %}
