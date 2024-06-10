@@ -36,7 +36,7 @@
         </li>
         <li class="nav-item">
           <a class="nav-link
-          {% if request.resolver_match.url_name == 'dashboard'%}
+          {% if request.resolver_match.url_name == 'show_dashboard'%}
             active navbar-brand"
           {% endif %}
           aria-current="page" href="{% url 'show_dashboard' %}">Dashboard</a>

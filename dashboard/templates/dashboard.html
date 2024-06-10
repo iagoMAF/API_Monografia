@@ -12,7 +12,11 @@
     <div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 30px;">
         <div>
             <h2>Nuvem de palavras baseado em palavras chaves mais utilizadas</h2>
-            <img src="{% static 'images/wordcloud.png' %}" alt="Nuvem de Palavras">
+            {% if arquivo_existe %}
+                <img src="{% static 'images/wordcloud.png' %}" alt="Nuvem de Palavras">
+            {% else %} 
+                <span class="fst-italic fs-4 opacity-75">* Nenhuma palavra-chave cadastrada</span>
+            {% endif %}
         </div>
         <!-- Gráfico de barras -->
         <div>

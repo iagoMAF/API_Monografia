@@ -40,7 +40,8 @@ def adicionar_documento(request):
     if request.method == 'POST':
         form = DocumentosForm(request.POST, request.FILES)
         if form.is_valid(): 
-            handle_uploaded_file(request.FILES['arquivo'])
+            if request.FILES:
+                handle_uploaded_file(request.FILES['arquivo'])
             model_instace = form.save(commit=False)
             model_instace.save()
             model_instace.autor.set(form.cleaned_data['autor'])

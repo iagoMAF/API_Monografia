@@ -16,7 +16,7 @@ class PesquisadorForm(forms.ModelForm):
       'nome': forms.TextInput(attrs={'placeholder': 'Entre com o nome'}),
       'email': forms.EmailInput(attrs={'placeholder': 'Entre com e-mail'}),
       'data_criacao': forms.DateField(disabled=True),
-      'ativo': forms.CheckboxInput(attrs={'placeholder': 'Usuário Ativo?'}),
+      'ativo': forms.CheckboxInput(attrs={'placeholder': 'Usuário Ativo?', 'checked': True}),
       'lattes': forms.TextInput(attrs={'placeholder': 'Entre com lattes'}),
       'linkedin': forms.TextInput(attrs={'placeholder': 'Entre com o linkd do Linkedin'}),
       'researchgate': forms.TextInput(attrs={'placeholder': 'Entre com o Search Gateway'}),
