@@ -36,9 +36,11 @@ def show_dashboard(request):
         wordcloud = WordCloud(background_color='white', width=800, height=400).generate(palavras_chaves)
         
         # Salve a imagem em um arquivo
-        wordcloud.to_file('dashboard/static/images/wordcloud.png')
+        wordcloud.to_file('static/images/wordcloud.png')
     
-    file_exists = os.path.isfile('dashboard/static/images/wordcloud.png')
+        file_exists = True
+    else: 
+        file_exists = False
 
     context = {
         'areas': areas,
