@@ -9,8 +9,8 @@
     <h1>Dashboard</h1>
 
     
-    <div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 30px;">
-        <div>
+    <div class="d-flex justify-content-evenly flex-wrap gap-5">
+        <div class="d-flex justify-content-center align-items-center flex-column">
             <h2>Nuvem de palavras baseado em palavras chaves mais utilizadas</h2>
             {% if arquivo_existe %}
                 <img src="{% static 'images/wordcloud.png' %}" alt="Nuvem de Palavras">
@@ -19,20 +19,20 @@
             {% endif %}
         </div>
         <!-- Gráfico de barras -->
-        <div>
+        <div class="d-flex justify-content-center align-items-center flex-column">
             <h2 style="margin-bottom: 60px;">Número de documentos por área de concentração</h2>
             <canvas id="barChart" style="max-width: 400px; max-height: 400px;"></canvas>
         </div>
         <!-- Gráfico de pizza -->
-        <div>
+        <div class="d-flex justify-content-center align-items-center flex-column">
             <h2 style="margin-bottom: 60px;">Distribuição dos pesquisadores por titulação</h2>
             <canvas id="pieChart" style="max-width: 400px; max-height: 400px;"></canvas>
         </div>
-        <div>
+        <div class="d-flex justify-content-center align-items-center flex-column">
             <h2>Quantidade de documentos por nota obtida</h2>
             <canvas id="documentosPorNotaChart" style="max-width: 400px; max-height: 400px;"></canvas>
         </div>
-        <div>
+        <div class="d-flex justify-content-center align-items-center flex-column">
             <h2>Quantidade de documentos por autor</h2>
             <canvas id="documentosPorAutorChart" style="max-width: 400px; max-height: 400px;"></canvas>
         </div>

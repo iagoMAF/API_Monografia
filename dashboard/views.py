@@ -53,7 +53,5 @@ def show_dashboard(request):
         'documentos_por_autor': documentos_por_autor,
         'arquivo_existe': file_exists,
     }
-    
-
 
     return render(request, 'dashboard.html', context)
